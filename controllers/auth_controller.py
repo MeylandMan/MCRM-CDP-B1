@@ -14,4 +14,11 @@ class AuthController:
         self.view = AuthView(self.root, self)
         self.root.title("Wemby - Connexion")
 
+    def login(self, email, password):
+        from models.auth_model import AuthModel
+        user = AuthModel.authenticate(email, password)
 
+        if user:
+            print("Connected successfully")
+        else:
+            print("The user does not exist")
