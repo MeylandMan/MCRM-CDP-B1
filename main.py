@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from controllers.auth_controller import AuthController
+from controllers.main_controller import MainController
 
 class MainApp:
     def __init__(self):
@@ -12,13 +13,15 @@ class MainApp:
         self.auth_controller = AuthController(self.root, self)
         self.auth_controller.show_login_view()
 
+        self.main_controller = None
+
         self.current_user = None
 
     def on_login_success(self, user):
         self.current_user = user
-        # Supprimer l'écran de connexion
-        for widget in self.root.winfo_children():
-            widget.destroy()
+
+        self.main_controller = MainController(self.root, self.current_user, self)
+        self.main_controller.show_dashboard()
 
     def run(self):
         self.root.mainloop()
