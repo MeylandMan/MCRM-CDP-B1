@@ -16,9 +16,13 @@ class AuthController:
 
     def login(self, email, password):
         from models.auth_model import AuthModel
-        user = AuthModel.authenticate(email, password)
-
-        if user:
-            print("Connected successfully")
-        else:
-            print("The user does not exist")
+        try:
+            user = AuthModel.authenticate(email, password)
+            if user:
+                print("Connexion réussie pour ", user[1], " (", user[4], ")")
+                self.app_controller.on_login_success(user)
+            else:
+                self.view.show_error("Nom d'utilisateur ou mot de passe incorrect.")
+        except Exception as err:
+            print("Erreur lors du login : ", err)
+            self.view.show_error("Une erreur s'est produite lors de la connexion.")

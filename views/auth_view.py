@@ -145,12 +145,17 @@ class AuthView(ctk.CTkFrame):
         )
         self.demo_commercial.pack(anchor="w", padx=10, pady=(0, 8))
 
+    def show_error(self, message: str):
+        messagebox.showerror("ERREUR", message)
+
     def on_login(self):
         email = self.email_entry.get()
         password = self.password_entry.get()
 
         if email == '' or password == '':
-            messagebox.showerror("ERREUR", "Veuillez remplir tous les champs.")
+            self.show_error("Veuillez remplir tous les champs.")
             return
-        
+
         self.controller.login(email, password)
+
+

@@ -14,6 +14,12 @@ class MainApp:
 
         self.current_user = None
 
+    def on_login_success(self, user):
+        self.current_user = user
+        # Supprimer l'écran de connexion
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
     def run(self):
         self.root.mainloop()
 
