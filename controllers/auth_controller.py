@@ -19,7 +19,7 @@ class AuthController:
         try:
             user = AuthModel.authenticate(email, password)
             if user:
-                print("Connexion réussie pour ", user[1], " (", user[4], ")")
+                print("Connexion réussie pour ", user["first_name"], " (", user["role_user"], ")")
                 self.app_controller.on_login_success(user)
             else:
                 self.view.show_error("Nom d'utilisateur ou mot de passe incorrect.")

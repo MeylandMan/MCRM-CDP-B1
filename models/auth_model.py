@@ -1,4 +1,5 @@
 from config import get_connection
+import pymysql
 import bcrypt
 
 class AuthModel:
@@ -6,7 +7,7 @@ class AuthModel:
     @staticmethod
     def authenticate(email: str, password: str):
         conn = get_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
 
         query = """
             SELECT id_user, first_name, last_name, email, password, role_user
@@ -14,7 +15,7 @@ class AuthModel:
             WHERE email = %s
         """
         cursor.execute(query, (email,))
-        user = list(cursor.fetchone())
+        user = cursor.fetchone()
 
         conn.close()
 
@@ -24,10 +25,10 @@ class AuthModel:
         # Vérification du mot de passe (bcrypt)
         if bcrypt.checkpw(
                 password.encode("utf-8"),
-                user[4].encode("utf-8")
+                user["password"].encode("utf-8")
         ):
             # On ne renvoie JAMAIS le mot de passe
-            del user[4]
+            user.pop("password")
 
             return user
 
