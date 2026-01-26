@@ -21,20 +21,13 @@ CREATE TABLE IF NOT EXISTS client (
 
 CREATE TABLE IF NOT EXISTS contact (
     id_contact INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    type_contact ENUM('appel', 'email', 'rendez-vous') NOT NULL,
-    date_contact DATETIME DEFAULT CURRENT_TIMESTAMP,
-    comments TEXT,
-
-    id_client INT NOT NULL,
-    id_user INT NOT NULL,
-
-    FOREIGN KEY (id_client)
-        REFERENCES client(id_client)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (id_user)
-        REFERENCES user(id_user)
-        ON DELETE CASCADE
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150),
+    phone VARCHAR(30),
+    company_name VARCHAR(100),
+    company_role VARCHAR(100),
+    notes TEXT
 );
 
 CREATE TABLE IF NOT EXISTS project (
@@ -71,5 +64,4 @@ CREATE TABLE IF NOT EXISTS invoice (
 );
 
 CREATE INDEX idx_client_statut ON client(statut);
-CREATE INDEX idx_contact_date ON contact(date_contact);
 CREATE INDEX idx_project_statut ON project(statut);

@@ -12,50 +12,7 @@ class ContactView(ctk.CTkFrame):
         # -----------------------------
         # Mock contacts
         # -----------------------------
-        contacts = [
-            {
-                "prenom": "Jean",
-                "nom": "Martin",
-                "email": "jean.martin@abc.fr",
-                "telephone": "06 12 34 56 78",
-                "entreprise": "Entreprise ABC",
-                "poste": "Directeur Commercial",
-                "notes": "Contact principal pour les décisions stratégiques",
-            },
-            {
-                "prenom": "Marie",
-                "nom": "Dubois",
-                "email": "marie.dubois@techsolutions.fr",
-                "telephone": "06 98 76 54 32",
-                "entreprise": "Tech Solutions",
-                "poste": "Chef de Projet",
-            },
-            {
-                "prenom": "Pierre",
-                "nom": "Bernard",
-                "email": "p.bernard@consultingpro.fr",
-                "telephone": "06 11 22 33 44",
-                "entreprise": "Consulting Pro",
-                "poste": "CEO",
-                "notes": "Très intéressé par nos services de développement web",
-            },
-            {
-                "prenom": "Sophie",
-                "nom": "Petit",
-                "email": "sophie.petit@digitalagency.fr",
-                "telephone": "06 55 66 77 88",
-                "entreprise": "Digital Agency",
-                "poste": "Responsable Marketing",
-            },
-            {
-                "prenom": "Luc",
-                "nom": "Durand",
-                "email": "luc.durand@abc.fr",
-                "telephone": "06 44 33 22 11",
-                "entreprise": "Entreprise ABC",
-                "poste": "Responsable Technique",
-            },
-        ]
+        contacts = self.controller.get_contacts()
 
         # -----------------------------
         # Header
@@ -113,9 +70,10 @@ class ContactView(ctk.CTkFrame):
         # -----------------------------
         # Contact cards
         # -----------------------------
-        for index, c in enumerate(contacts):
-            row = index // columns
-            col = index % columns
+
+        for i, (index, first_name, last_name, email, phone, company_name, company_role, contact_notes) in enumerate(contacts):
+            row = i // columns
+            col = i % columns
 
             card = ctk.CTkFrame(
                 grid,
@@ -140,7 +98,7 @@ class ContactView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 avatar,
-                text=f"{c['prenom'][0]}{c['nom'][0]}",
+                text=f"{last_name[0]}{first_name[0]}",
                 font=("Arial", 16, "bold"),
                 text_color="#4f46e5"
             ).place(relx=0.5, rely=0.5, anchor="center")
@@ -150,14 +108,14 @@ class ContactView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 info,
-                text=f"{c['prenom']} {c['nom']}",
+                text=f"{last_name} {first_name}",
                 font=("Arial", 13, "bold"),
                 text_color="#111827"
             ).pack(anchor="w")
 
             ctk.CTkLabel(
                 info,
-                text=c["poste"],
+                text=company_role,
                 font=("Arial", 11),
                 text_color="#6b7280"
             ).pack(anchor="w")
@@ -174,18 +132,18 @@ class ContactView(ctk.CTkFrame):
                     text_color="#374151"
                 ).pack(anchor="w", pady=2)
 
-            info_line(c["entreprise"])
-            info_line(c["email"])
-            info_line(c["telephone"])
+            info_line(company_name)
+            info_line(email)
+            info_line(phone)
 
             # --- Notes
-            if "notes" in c:
+            if contact_notes:
                 notes = ctk.CTkFrame(card, fg_color="#f9fafb", corner_radius=8)
                 notes.pack(fill="x", padx=15, pady=8)
 
                 ctk.CTkLabel(
                     notes,
-                    text=c["notes"],
+                    text=contact_notes,
                     font=("Arial", 10),
                     text_color="#6b7280",
                     wraplength=260,

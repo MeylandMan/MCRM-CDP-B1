@@ -1,5 +1,5 @@
 from views.contact_view import ContactView
-
+from models.contact_model import ContactModel
 
 class ContactController:
     def __init__(self, content):
@@ -13,5 +13,8 @@ class ContactController:
 
     @staticmethod
     def get_contacts_count(condition: str):
-        from models.contact_model import ContactModel
         return ContactModel.get_contacts_count(condition)
+
+    @staticmethod
+    def get_contacts():
+        return ContactModel.get_contacts()
