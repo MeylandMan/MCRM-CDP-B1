@@ -38,7 +38,7 @@ class MainView(ctk.CTkFrame):
         # Header
         ctk.CTkLabel(
             self.sidebar,
-            text="Mini CRM",
+            text="Wemby",
             font=("Arial", 22, "bold"),
             text_color="white"
         ).pack(pady=(25, 5))
