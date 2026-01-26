@@ -1,0 +1,12 @@
+from views.contact_view import ContactView
+
+
+class ContactController:
+    def __init__(self, content):
+        self.view = ContactView(content, self)
+
+    def show_contacts(self):
+        self.view.create_widgets()
+
+    def on_new_contact(self):
+        print("Créer un nouveau contact")
