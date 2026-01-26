@@ -10,3 +10,8 @@ class ContactController:
 
     def on_new_contact(self):
         print("Créer un nouveau contact")
+
+    @staticmethod
+    def get_contacts_count(condition: str):
+        from models.contact_model import ContactModel
+        return ContactModel.get_contacts_count(condition)
