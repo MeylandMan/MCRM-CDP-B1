@@ -11,7 +11,6 @@ DB_CONFIG = {
 
 def get_connection():
     connection = None
-
     try:
         connection = pymysql.connect(
             host=DB_CONFIG['host'],

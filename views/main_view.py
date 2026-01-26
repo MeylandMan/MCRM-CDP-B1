@@ -164,8 +164,7 @@ class MainView(ctk.CTkFrame):
 
         # Chiffre d'affaires mensuel
         revenue = ctk.CTkFrame(self.content, fg_color="white", corner_radius=12)
-        revenue.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
-
+        revenue.grid(row = 1, column = 0, columnspan = 2, padx = 10, pady = 10, sticky = "nsew")
         # Header
         header = ctk.CTkFrame(revenue, fg_color="transparent")
         header.pack(fill="x", padx=15, pady=(15, 5))
@@ -207,7 +206,7 @@ class MainView(ctk.CTkFrame):
 
         # Activités récentes
         activities = ctk.CTkFrame(self.content, fg_color="white", corner_radius=12)
-        activities.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+        activities.grid(row=1, column=2, columnspan=2, padx=10, pady=10, sticky="nsew")
 
         ctk.CTkLabel(
             activities,
@@ -233,8 +232,7 @@ class MainView(ctk.CTkFrame):
 
         # Actions rapides
         actions = ctk.CTkFrame(self.content, fg_color="white", corner_radius=12)
-        actions.grid(row=1, column=2, columnspan=2, padx=10, pady=10, sticky="nsew")
-
+        actions.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
         ctk.CTkLabel(
             actions,
             text="Actions rapides",
@@ -243,20 +241,20 @@ class MainView(ctk.CTkFrame):
         ).pack(anchor="w", padx=15, pady=10)
 
         buttons = [
-            ("+ Nouveau client", "#4f46e5"),
-            ("+ Nouveau projet", "#22c55e"),
-            ("+ Nouveau devis", "#eab308"),
-            ("+ Nouveau contact", "#a855f7"),
+            ("+ Nouveau client", "#4f46e5", 0),
+            ("+ Nouveau projet", "#22c55e", 1),
+            ("+ Nouveau devis", "#eab308", 2),
+            ("+ Nouveau contact", "#a855f7", 3),
         ]
 
-        for text, color in buttons:
-            ctk.CTkButton(
+        for text, color, column in buttons:
+            (ctk.CTkButton(
                 actions,
                 text=text,
                 fg_color=color,
                 height=38,
                 corner_radius=8
-            ).pack(fill="x", padx=20, pady=6)
+            ).pack(side="left", padx=20, pady=6, expand=True))
 
     # -------------------------------------------------
     # Navigation
@@ -265,7 +263,7 @@ class MainView(ctk.CTkFrame):
         for btn in self.menu_buttons.values():
             btn.configure(fg_color="transparent")
 
-        self.menu_buttons[page].configure(fg_color="#4338cA")
+        self.menu_buttons[page].configure(fg_color="#4338ca")
 
         if page == "dashboard":
             self.show_dashboard_home()

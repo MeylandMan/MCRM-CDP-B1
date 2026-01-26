@@ -23,6 +23,12 @@ class MainApp:
         self.main_controller = MainController(self.root, self.current_user, self)
         self.main_controller.show_dashboard()
 
+    def on_logout(self):
+        self.current_user = None
+
+        self.auth_controller = AuthController(self.root, self)
+        self.auth_controller.show_login_view()
+
     def run(self):
         self.root.mainloop()
 

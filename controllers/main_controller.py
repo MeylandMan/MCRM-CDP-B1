@@ -18,5 +18,5 @@ class MainController:
         self.root.title("Wemby - Accueil")
 
     def logout(self):
-        print("Logout button")
+        self.app_controller.on_logout()
 
