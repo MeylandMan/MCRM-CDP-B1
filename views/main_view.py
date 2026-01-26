@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from controllers.invoice_controller import InvoiceController
+
 class MainView(ctk.CTkFrame):
     def __init__(self, root, user_role, controller):
         super().__init__(root)
@@ -135,7 +137,7 @@ class MainView(ctk.CTkFrame):
         from controllers.project_controller import ProjectController
         active_projects = ProjectController(self.content).get_project_count("en cours")
 
-        from controllers.invoice_controller import InvoiceController
+
         sent_invoices = InvoiceController(self.content).get_invoices_count("envoyé")
 
         from controllers.contact_controller import ContactController
@@ -202,9 +204,13 @@ class MainView(ctk.CTkFrame):
         )
         body.pack(fill="both", expand=True, padx=15, pady=15)
 
+        from datetime import datetime
+        date = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        sum = InvoiceController.get_sum_month(date)
+
         ctk.CTkLabel(
             body,
-            text="€45 230",
+            text=f"€{sum}",
             font=("Arial", 32, "bold"),
             text_color="#4f46e5"
         ).pack(pady=(40, 5))

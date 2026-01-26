@@ -17,3 +17,8 @@ class InvoiceController:
     def get_invoices_count(condition: str):
         from models.invoice_model import InvoiceModel
         return InvoiceModel.get_invoices_count(condition)
+
+    @staticmethod
+    def get_sum_month(date: str):
+        from models.invoice_model import InvoiceModel
+        return InvoiceModel.get_sum_month(date)
