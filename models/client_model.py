@@ -16,3 +16,17 @@ class ClientModel:
 
         conn.close()
         return count
+
+    @staticmethod
+    def get_clients():
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM client WHERE 1")
+
+        clients = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return clients

@@ -12,40 +12,7 @@ class ClientView(ctk.CTkFrame):
         # ----------------------------
         # Données mock (temporaire)
         # ----------------------------
-        clients = [
-            {
-                "nom": "Entreprise ABC",
-                "email": "contact@abc.fr",
-                "telephone": "01 23 45 67 89",
-                "entreprise": "ABC SAS",
-                "statut": "actif",
-                "date": "15/01/2024",
-            },
-            {
-                "nom": "Tech Solutions",
-                "email": "info@techsolutions.fr",
-                "telephone": "01 98 76 54 32",
-                "entreprise": "Tech Solutions SARL",
-                "statut": "actif",
-                "date": "20/02/2024",
-            },
-            {
-                "nom": "Consulting Pro",
-                "email": "hello@consultingpro.fr",
-                "telephone": "01 11 22 33 44",
-                "entreprise": "Consulting Pro",
-                "statut": "prospect",
-                "date": "10/03/2024",
-            },
-            {
-                "nom": "Digital Agency",
-                "email": "contact@digitalagency.fr",
-                "telephone": "01 55 66 77 88",
-                "entreprise": "Digital Agency SA",
-                "statut": "inactif",
-                "date": "05/11/2023",
-            },
-        ]
+        clients = self.controller.get_clients()
 
         statut_colors = {
             "actif": ("#dcfce7", "#166534"),
@@ -106,9 +73,9 @@ class ClientView(ctk.CTkFrame):
         list_frame.columnconfigure(1, weight=1)
         list_frame.pack(fill="both", expand=True, padx=10, pady=5)
 
-        for index, client in enumerate(clients):
+        for i, (index, company_name, contact_name, email, phone, address, client_statut, creation_date) in enumerate(clients):
             card = ctk.CTkFrame(list_frame, fg_color="white", corner_radius=12)
-            card.grid(row=index // 2, column=index % 2, padx=8, pady=8, sticky="nsew")
+            card.grid(row=i // 2, column=i % 2, padx=8, pady=8, sticky="nsew")
 
             # Header carte
             top = ctk.CTkFrame(card, fg_color="transparent")
@@ -116,22 +83,22 @@ class ClientView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 top,
-                text=client["nom"],
+                text=company_name,
                 font=("Arial", 15, "bold"),
                 text_color="#111827"
             ).pack(anchor="w")
 
             ctk.CTkLabel(
                 top,
-                text=client["entreprise"],
+                text=contact_name,
                 font=("Arial", 12),
                 text_color="#6b7280"
             ).pack(anchor="w")
 
-            bg, fg = statut_colors[client["statut"]]
+            bg, fg = statut_colors[client_statut]
             statut = ctk.CTkLabel(
                 top,
-                text=client["statut"],
+                text=client_statut,
                 fg_color=bg,
                 text_color=fg,
                 corner_radius=20,
@@ -147,14 +114,21 @@ class ClientView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 infos,
-                text=f"📧 {client['email']}",
+                text=f"📍 {address}",
                 font=("Arial", 12),
                 text_color="#374151"
             ).pack(anchor="w", pady=2)
 
             ctk.CTkLabel(
                 infos,
-                text=f"📞 {client['telephone']}",
+                text=f"📧 {email}",
+                font=("Arial", 12),
+                text_color="#374151"
+            ).pack(anchor="w", pady=2)
+
+            ctk.CTkLabel(
+                infos,
+                text=f"📞 {phone}",
                 font=("Arial", 12),
                 text_color="#374151"
             ).pack(anchor="w", pady=2)
@@ -165,7 +139,7 @@ class ClientView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 footer,
-                text=f"Créé le {client['date']}",
+                text=f"Créé le {creation_date}",
                 font=("Arial", 10),
                 text_color="#9ca3af"
             ).pack(side="left")
@@ -190,3 +164,4 @@ class ClientView(ctk.CTkFrame):
                 fg_color="#fee2e2",
                 text_color="#991b1b"
             ).pack(side="left", padx=4)
+
