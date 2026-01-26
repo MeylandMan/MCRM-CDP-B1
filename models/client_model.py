@@ -1,3 +1,5 @@
+import pymysql.cursors
+
 from config import get_connection
 
 class ClientModel:
@@ -25,6 +27,20 @@ class ClientModel:
         cursor.execute("SELECT * FROM client WHERE 1")
 
         clients = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return clients
+
+    @staticmethod
+    def get_client(index):
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        cursor.execute("SELECT * FROM client WHERE id_client = %s", (index,))
+
+        clients = cursor.fetchone()
 
         cursor.close()
         conn.close()

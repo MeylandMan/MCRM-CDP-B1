@@ -16,3 +16,17 @@ class ProjectModel:
 
         conn.close()
         return count
+
+    @staticmethod
+    def get_projects():
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM project WHERE 1")
+
+        projects = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return projects

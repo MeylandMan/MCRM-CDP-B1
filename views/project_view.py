@@ -9,47 +9,7 @@ class ProjectView(ctk.CTkFrame):
         self.pack(fill="both", expand=True)
 
     def create_widgets(self):
-        # -----------------------------
-        # Mock projets (plus tard → model)
-        # -----------------------------
-        projets = [
-            {
-                "nom": "Site Web E-commerce",
-                "client": "Entreprise ABC",
-                "statut": "en cours",
-                "date_debut": "15/01/2024",
-                "date_fin": "15/03/2024",
-                "budget": "25 000 €",
-                "description": "Développement d'un site e-commerce avec système de paiement"
-            },
-            {
-                "nom": "Application Mobile",
-                "client": "Tech Solutions",
-                "statut": "en cours",
-                "date_debut": "01/02/2024",
-                "date_fin": None,
-                "budget": "45 000 €",
-                "description": "Application mobile iOS et Android pour la gestion de stocks"
-            },
-            {
-                "nom": "Refonte Logo & Charte",
-                "client": "Digital Agency",
-                "statut": "terminé",
-                "date_debut": "01/12/2023",
-                "date_fin": "10/01/2024",
-                "budget": "8 000 €",
-                "description": "Refonte complète de l'identité visuelle"
-            },
-            {
-                "nom": "Site Vitrine",
-                "client": "Consulting Pro",
-                "statut": "en attente",
-                "date_debut": "01/03/2024",
-                "date_fin": None,
-                "budget": "5 000 €",
-                "description": "Site vitrine responsive avec CMS"
-            },
-        ]
+        projects = self.controller.get_projects()
 
         # -----------------------------
         # Header
@@ -69,7 +29,7 @@ class ProjectView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             left,
-            text=f"{len(projets)} projets au total",
+            text=f"{len(projects)} projets au total",
             font=("Arial", 12),
             text_color="#6b7280"
         ).pack(anchor="w")
@@ -95,12 +55,12 @@ class ProjectView(ctk.CTkFrame):
         ).pack(fill="x", padx=15, pady=12)
 
         # -----------------------------
-        # Liste projets
+        # Liste projects
         # -----------------------------
         list_frame = ctk.CTkFrame(self, fg_color="transparent")
         list_frame.pack(fill="both", expand=True, padx=5)
 
-        for projet in projets:
+        for i, (index, name, desc, start_date, end_date, project_statut, id_client) in enumerate(projects):
             card = ctk.CTkFrame(
                 list_frame,
                 fg_color="white",
@@ -119,14 +79,15 @@ class ProjectView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 left_top,
-                text=projet["nom"],
+                text=name,
                 font=("Arial", 16, "bold"),
                 text_color="#111827"
             ).pack(anchor="w")
 
+            from controllers.client_controller import ClientController
             ctk.CTkLabel(
                 left_top,
-                text=f"Client : {projet['client']}",
+                text=f"Client : {ClientController.get_client(id_client)["contact_name"]}",
                 font=("Arial", 12),
                 text_color="#6b7280"
             ).pack(anchor="w", pady=(2, 0))
@@ -138,11 +99,11 @@ class ProjectView(ctk.CTkFrame):
                 "en attente": ("#fef9c3", "#854d0e")
             }
 
-            bg, fg = statut_colors.get(projet["statut"], ("#e5e7eb", "#374151"))
+            bg, fg = statut_colors.get(project_statut, ("#e5e7eb", "#374151"))
 
             ctk.CTkLabel(
                 top,
-                text=projet["statut"],
+                text=project_statut,
                 fg_color=bg,
                 text_color=fg,
                 corner_radius=20,
@@ -156,7 +117,7 @@ class ProjectView(ctk.CTkFrame):
             # -----------------------------
             ctk.CTkLabel(
                 card,
-                text=projet["description"],
+                text=desc,
                 font=("Arial", 12),
                 text_color="#374151",
                 wraplength=900,
@@ -171,15 +132,15 @@ class ProjectView(ctk.CTkFrame):
 
             ctk.CTkLabel(
                 infos,
-                text=f"Début : {projet['date_debut']}",
+                text=f"Début : {start_date}",
                 font=("Arial", 11),
                 text_color="#6b7280"
             ).pack(side="left", padx=(0, 15))
 
-            if projet["date_fin"]:
+            if end_date:
                 ctk.CTkLabel(
                     infos,
-                    text=f"Fin : {projet['date_fin']}",
+                    text=f"Fin : {end_date}",
                     font=("Arial", 11),
                     text_color="#6b7280"
                 ).pack(side="left", padx=(0, 15))

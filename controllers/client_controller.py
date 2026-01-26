@@ -20,3 +20,7 @@ class ClientController:
     @staticmethod
     def get_clients():
         return ClientModel.get_clients()
+
+    @staticmethod
+    def get_client(index):
+        return ClientModel.get_client(index)

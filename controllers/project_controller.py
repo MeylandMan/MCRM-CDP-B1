@@ -1,5 +1,5 @@
 from views.project_view import ProjectView
-
+from models.project_model import ProjectModel
 
 class ProjectController:
     def __init__(self, content):
@@ -15,5 +15,8 @@ class ProjectController:
 
     @staticmethod
     def get_project_count(condition: str):
-        from models.project_model import ProjectModel
         return ProjectModel.get_project_count(condition)
+
+    @staticmethod
+    def get_projects():
+        return ProjectModel.get_projects()

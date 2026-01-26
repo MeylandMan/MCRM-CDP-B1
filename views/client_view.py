@@ -9,9 +9,6 @@ class ClientView(ctk.CTkFrame):
         self.pack(fill="both", expand=True)
 
     def create_widgets(self):
-        # ----------------------------
-        # Données mock (temporaire)
-        # ----------------------------
         clients = self.controller.get_clients()
 
         statut_colors = {
