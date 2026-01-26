@@ -4,9 +4,10 @@ from views.project_view import ProjectView
 class ProjectController:
     def __init__(self, content):
         self.view = None
+        self.content = content
 
     def show_projects(self):
-        self.view = ProjectView(content, self)
+        self.view = ProjectView(self.content, self)
         self.view.create_widgets()
 
     def on_new_project(self):
