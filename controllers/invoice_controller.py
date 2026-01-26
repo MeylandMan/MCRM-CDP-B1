@@ -12,3 +12,8 @@ class InvoiceController:
 
     def on_new_invoice(self):
         print("Créer un nouveau devis")
+
+    @staticmethod
+    def get_invoices_count(condition: str):
+        from models.invoice_model import InvoiceModel
+        return InvoiceModel.get_invoices_count(condition)

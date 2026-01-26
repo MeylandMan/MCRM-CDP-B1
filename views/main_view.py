@@ -135,10 +135,13 @@ class MainView(ctk.CTkFrame):
         from controllers.project_controller import ProjectController
         active_projects = ProjectController(self.content).get_project_count("en cours")
 
+        from controllers.invoice_controller import InvoiceController
+        sent_invoices = InvoiceController(self.content).get_invoices_count("envoyé")
+
         stats = [
             ("Clients actifs", active_clients, "+12%", "#3b82f6"),
             ("Projets en cours", active_projects, "+3", "#22c55e"),
-            ("Devis envoyés", "23", "+8", "#eab308"),
+            ("Devis envoyés", sent_invoices, "+8", "#eab308"),
             ("Contacts", "156", "+24", "#a855f7"),
         ]
 
