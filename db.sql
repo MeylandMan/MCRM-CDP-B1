@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS client (
     email VARCHAR(150) NOT NULL,
     phone VARCHAR(30),
     address TEXT,
-    statut ENUM('prospect', 'client') DEFAULT 'prospect',
+    statut ENUM('actif', 'inactif', 'prospect') DEFAULT 'prospect',
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

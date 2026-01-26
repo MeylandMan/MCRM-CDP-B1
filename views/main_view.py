@@ -129,8 +129,11 @@ class MainView(ctk.CTkFrame):
         self.clear_content()
         self.page_title.configure(text="Tableau de bord")
 
+        from controllers.client_controller import ClientController
+        active_clients = ClientController(self.content).get_clients_count("actif")
+
         stats = [
-            ("Clients actifs", "48", "+12%", "#3b82f6"),
+            ("Clients actifs", active_clients, "+12%", "#3b82f6"),
             ("Projets en cours", "12", "+3", "#22c55e"),
             ("Devis envoyés", "23", "+8", "#eab308"),
             ("Contacts", "156", "+24", "#a855f7"),
