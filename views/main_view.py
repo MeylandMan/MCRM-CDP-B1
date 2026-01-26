@@ -58,7 +58,7 @@ class MainView(ctk.CTkFrame):
         menu_items = [
             ("dashboard", "Tableau de bord"),
             ("clients", "Clients"),
-            ("projets", "Projets"),
+            ("projects", "Projets"),
             ("invoices", "Devis"),
             ("contacts", "Contacts"),
         ]
@@ -259,19 +259,22 @@ class MainView(ctk.CTkFrame):
         ).pack(anchor="w", padx=15, pady=10)
 
         buttons = [
-            ("+ Nouveau client", "#4f46e5", 0),
-            ("+ Nouveau projet", "#22c55e", 1),
-            ("+ Nouveau devis", "#eab308", 2),
-            ("+ Nouveau contact", "#a855f7", 3),
+            ("+ Nouveau client", "#4f46e5", "clients"),
+            ("+ Nouveau projet", "#22c55e", "projects"),
+            ("+ Nouveau devis", "#eab308", "invoices"),
+            ("+ Nouveau contact", "#a855f7", "contacts"),
         ]
 
-        for text, color, column in buttons:
+
+
+        for text, color, key in buttons:
             (ctk.CTkButton(
                 actions,
                 text=text,
                 fg_color=color,
                 height=38,
-                corner_radius=8
+                corner_radius=8,
+                command=lambda k=key: self.navigate(k)
             ).pack(side="left", padx=20, pady=6, expand=True))
 
     # -------------------------------------------------
@@ -332,7 +335,7 @@ class MainView(ctk.CTkFrame):
                 self.show_dashboard_home()
             case "clients":
                 self.show_clients_home()
-            case "projets":
+            case "projects":
                 self.show_projects_home()
             case "invoices":
                 self.show_invoices_home()
