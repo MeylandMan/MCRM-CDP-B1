@@ -13,6 +13,7 @@ class ClientController:
     def on_new_client(self):
         print("Créer un nouveau client")
 
-    def get_clients_count(self, condition: str):
+    @staticmethod
+    def get_clients_count(condition: str):
         from models.client_model import ClientModel
         return ClientModel.get_client_count(condition)
