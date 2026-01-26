@@ -57,7 +57,7 @@ class MainView(ctk.CTkFrame):
             ("dashboard", "Tableau de bord"),
             ("clients", "Clients"),
             ("projets", "Projets"),
-            ("devis", "Devis"),
+            ("invoices", "Devis"),
             ("contacts", "Contacts"),
         ]
 
@@ -257,6 +257,30 @@ class MainView(ctk.CTkFrame):
             ).pack(side="left", padx=20, pady=6, expand=True))
 
     # -------------------------------------------------
+    # Clients Home
+    # -------------------------------------------------
+    def show_clients_home(self):
+        print("Clients panel")
+
+    # -------------------------------------------------
+    # Projects Home
+    # -------------------------------------------------
+    def show_projects_home(self):
+        print("Projects panel")
+
+    # -------------------------------------------------
+    # Invoices Home
+    # -------------------------------------------------
+    def show_invoices_home(self):
+        print("Invoices panel")
+
+    # -------------------------------------------------
+    # Contacts Home
+    # -------------------------------------------------
+    def show_contacts_home(self):
+        print("Contacts panel")
+
+    # -------------------------------------------------
     # Navigation
     # -------------------------------------------------
     def navigate(self, page):
@@ -265,8 +289,17 @@ class MainView(ctk.CTkFrame):
 
         self.menu_buttons[page].configure(fg_color="#4338ca")
 
-        if page == "dashboard":
-            self.show_dashboard_home()
-        else:
-            self.clear_content()
-            self.page_title.configure(text=page.capitalize())
+        match page:
+            case "dashboard":
+                self.show_dashboard_home()
+            case "clients":
+                self.show_clients_home()
+            case "projets":
+                self.show_projects_home()
+            case "invoices":
+                self.show_invoices_home()
+            case "contacts":
+                self.show_contacts_home()
+            case _:
+                self.clear_content()
+                self.page_title.configure(text=page.capitalize())
