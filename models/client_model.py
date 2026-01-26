@@ -40,9 +40,9 @@ class ClientModel:
 
         cursor.execute("SELECT * FROM client WHERE id_client = %s", (index,))
 
-        clients = cursor.fetchone()
+        client = cursor.fetchone()
 
         cursor.close()
         conn.close()
 
-        return clients
+        return client

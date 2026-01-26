@@ -1,4 +1,5 @@
 from config import get_connection
+import pymysql
 
 class ProjectModel:
 
@@ -30,3 +31,17 @@ class ProjectModel:
         conn.close()
 
         return projects
+
+    @staticmethod
+    def get_project(index):
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        cursor.execute("SELECT * FROM project WHERE id_project = %s", (index,))
+
+        project = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return project

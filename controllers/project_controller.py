@@ -20,3 +20,7 @@ class ProjectController:
     @staticmethod
     def get_projects():
         return ProjectModel.get_projects()
+
+    @staticmethod
+    def get_project(index):
+        return ProjectModel.get_project(index)

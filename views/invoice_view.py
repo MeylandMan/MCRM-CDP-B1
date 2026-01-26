@@ -11,44 +11,7 @@ class InvoiceView(ctk.CTkFrame):
         # -----------------------------
         # Mock devis (plus tard → model)
         # -----------------------------
-        devis = [
-            {
-                "id": "1",
-                "numero": "DEV-2024-001",
-                "client": "Entreprise ABC",
-                "montant": 25000,
-                "statut": "accepté",
-                "date_creation": "10/01/2024",
-                "date_validite": "10/02/2024",
-            },
-            {
-                "id": "2",
-                "numero": "DEV-2024-002",
-                "client": "Tech Solutions",
-                "montant": 45000,
-                "statut": "envoyé",
-                "date_creation": "25/01/2024",
-                "date_validite": "25/02/2024",
-            },
-            {
-                "id": "3",
-                "numero": "DEV-2024-003",
-                "client": "Consulting Pro",
-                "montant": 5000,
-                "statut": "brouillon",
-                "date_creation": "15/02/2024",
-                "date_validite": "15/03/2024",
-            },
-            {
-                "id": "4",
-                "numero": "DEV-2024-004",
-                "client": "Digital Agency",
-                "montant": 12000,
-                "statut": "refusé",
-                "date_creation": "05/01/2024",
-                "date_validite": "05/02/2024",
-            },
-        ]
+        invoices = self.controller.get_invoices()
 
         # -----------------------------
         # Header
@@ -68,7 +31,7 @@ class InvoiceView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             left,
-            text=f"{len(devis)} devis au total",
+            text=f"{len(invoices)} devis au total",
             font=("Arial", 12),
             text_color="#6b7280"
         ).pack(anchor="w")
@@ -107,7 +70,7 @@ class InvoiceView(ctk.CTkFrame):
         header_row = ctk.CTkFrame(table, fg_color="#f9fafb")
         header_row.grid(row=0, column=0, columnspan=7, sticky="ew")
 
-        titles = ["Numéro", "Client", "Montant", "Statut", "Création", "Validité", "Actions"]
+        titles = ["Numéro", "Client", "Projet", "Montant", "Statut", "Création", "Actions"]
 
         aligns = ["w", "w", "w", "w", "w", "w", "w"]
 
@@ -140,27 +103,47 @@ class InvoiceView(ctk.CTkFrame):
         # -----------------------------
         # Rows
         # -----------------------------
-        for row_index, d in enumerate(devis, start=1):
+        for row_index, (index, invoice_date, amount, invoice_statut, id_client, id_project) in enumerate(invoices):
             row = ctk.CTkFrame(table, fg_color="transparent")
-            row.grid(row=row_index, column=0, columnspan=7, sticky="ew")
+            row.grid(row=index, column=0, columnspan=7, sticky="ew")
 
             for i in range(7):
                 row.grid_columnconfigure(i, weight=1)
-            (ctk.CTkLabel(row, text=d["numero"], font=("Arial", 12, "bold"), text_color="#111827" )
+
+            from datetime import datetime
+            try:
+                date_obj = datetime.strptime(str(invoice_date), "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                print("ERREUR: la date doit être au format YYYY-MM-DD HH:MM:SS")
+                return None
+
+            year = date_obj.year
+
+            number = f"DEV-{year}-{str(index).zfill(3)}"
+
+            (ctk.CTkLabel(row, text=number, font=("Arial", 12, "bold"), text_color="#111827")
              .grid(row=0, column=0, padx=12, pady=14, sticky="w"))
-            (ctk.CTkLabel(row, text=d["client"], font=("Arial", 12, "bold"), text_color="#111827")
+
+            from controllers.client_controller import ClientController
+            (ctk.CTkLabel(row, text=ClientController.get_client(id_client)["contact_name"], font=("Arial", 12, "bold"), text_color="#111827")
              .grid(row=0, column=1, padx=12, pady=14, sticky="w"))
-            (ctk.CTkLabel(row, text=f"{d['montant']:,} €".replace(",", " "), font=("Arial", 12, "bold"), text_color="#111827")
+
+            from controllers.project_controller import ProjectController
+            (ctk.CTkLabel(row, text=ProjectController.get_project(id_project)["project_name"],
+                          font=("Arial", 12, "bold"),
+                          text_color="#111827")
              .grid(row=0, column=2, padx=12, pady=14, sticky="w"))
 
-            bg, fg = statut_colors[d["statut"]]
-            (ctk.CTkLabel(row, text=d["statut"], font=("Arial", 12, "bold"), fg_color=bg, text_color=fg, corner_radius=20)
+            (ctk.CTkLabel(row, text=f"{amount} €".replace(",", " "), font=("Arial", 12, "bold"),
+                          text_color="#111827")
              .grid(row=0, column=3, padx=12, pady=14, sticky="w"))
 
-            (ctk.CTkLabel(row, text=d["date_creation"], font=("Arial", 12, "bold"),
-                          text_color="#111827")
+            bg, fg = statut_colors[invoice_statut]
+            (ctk.CTkLabel(row, text=invoice_statut, font=("Arial", 12, "bold"), fg_color=bg, text_color=fg,
+                          corner_radius=20)
              .grid(row=0, column=4, padx=12, pady=14, sticky="w"))
-            (ctk.CTkLabel(row, text=d["date_validite"], font=("Arial", 12, "bold"),
+
+            (ctk.CTkLabel(row, text=invoice_date, font=("Arial", 12, "bold"),
                           text_color="#111827")
              .grid(row=0, column=5, padx=12, pady=14, sticky="w"))
 

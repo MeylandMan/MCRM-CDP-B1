@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS invoice (
     id_invoice INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     invoice_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     amount DECIMAL(10,2) NOT NULL,
-    statut ENUM('brouillon', 'envoyé', 'accepté', 'refusé') DEFAULT 'en attente',
+    statut ENUM('brouillon', 'envoyé', 'accepté', 'refusé') DEFAULT 'brouillon',
 
     id_client INT NOT NULL,
     id_project INT UNIQUE,

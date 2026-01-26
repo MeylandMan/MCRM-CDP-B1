@@ -1,5 +1,5 @@
 from views.invoice_view import InvoiceView
-
+from models.invoice_model import InvoiceModel
 
 class InvoiceController:
     def __init__(self, content):
@@ -15,10 +15,12 @@ class InvoiceController:
 
     @staticmethod
     def get_invoices_count(condition: str):
-        from models.invoice_model import InvoiceModel
         return InvoiceModel.get_invoices_count(condition)
 
     @staticmethod
     def get_sum_month(date: str):
-        from models.invoice_model import InvoiceModel
         return InvoiceModel.get_sum_month(date)
+
+    @staticmethod
+    def get_invoices():
+        return InvoiceModel.get_invoices()

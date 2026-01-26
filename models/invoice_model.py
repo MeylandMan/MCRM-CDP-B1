@@ -50,3 +50,17 @@ class InvoiceModel:
 
         return count[0]
 
+    @staticmethod
+    def get_invoices():
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM invoice WHERE 1")
+
+        invoices = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return invoices
+
