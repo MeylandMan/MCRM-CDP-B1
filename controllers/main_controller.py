@@ -21,3 +21,7 @@ class MainController:
     def logout(self):
         self.app_controller.on_logout()
 
+    def get_first_movements(self):
+        from models.main_model import MainModel
+        return MainModel.get_first_movements()
+

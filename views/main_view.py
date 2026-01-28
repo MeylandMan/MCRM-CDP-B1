@@ -233,20 +233,16 @@ class MainView(ctk.CTkFrame):
             text_color="#111827"
         ).pack(anchor="w", padx=15, pady=10)
 
-        recent = [
-            "Nouveau client : Entreprise ABC",
-            "Devis #2024-003 accepté",
-            "Projet Site Web terminé",
-            "Nouveau contact : Marie Dubois"
-        ]
+        recent = self.controller.get_first_movements()
 
-        for item in recent:
+        for i, (movement_date, movement_text, id_user) in enumerate(recent):
             ctk.CTkLabel(
                 activities,
-                text="• " + item,
+                text="• " + movement_text,
                 font=("Arial", 12),
                 text_color="#374151"
             ).pack(anchor="w", padx=20, pady=4)
+
 
         # Actions rapides
         actions = ctk.CTkFrame(self.content, fg_color="white", corner_radius=12)
