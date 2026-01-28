@@ -25,5 +25,8 @@ class ClientController:
     def get_client(index):
         return ClientModel.get_client(index)
 
-    def add_client(self, company_name, contact_name, email, phone, address, client_statut):
-        ClientModel.add_client(company_name, contact_name, email, phone, address, client_statut)
+    def add_client(self, client_data):
+        ClientModel.add_client(client_data)
+
+    def modify_client(self, index, client_data):
+        ClientModel.modify_client(index, client_data)

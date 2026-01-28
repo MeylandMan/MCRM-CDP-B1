@@ -52,7 +52,7 @@ class ClientView(ctk.CTkFrame):
             hover_color="#4338ca",
             corner_radius=8,
             height=38,
-            command=self.show_client_form
+            command=lambda:self.show_client_form("Creer", -1)
         ).pack(side="right")
 
         # ----------------------------
@@ -156,7 +156,8 @@ class ClientView(ctk.CTkFrame):
                 width=36,
                 height=32,
                 fg_color="#eef2ff",
-                text_color="#4f46e5"
+                text_color="#4f46e5",
+                command=lambda:self.show_client_form("Modifier", index)
             ).pack(side="left", padx=4)
 
             ctk.CTkButton(
@@ -168,13 +169,13 @@ class ClientView(ctk.CTkFrame):
                 text_color="#991b1b"
             ).pack(side="left", padx=4)
 
-    def show_client_form(self):
+    def show_client_form(self, action: str, index):
 
         # =============================
         # Fenêtre modale
         # =============================
         modal = ctk.CTkToplevel(self.root)
-        modal.title("Nouveau client")
+        modal.title("Nouveau client" if action == "Creer" else "Modifier client")
         modal.geometry("420x720")
         modal.resizable(False, False)
         modal.transient(self.root)
@@ -209,7 +210,7 @@ class ClientView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             header,
-            text="Nouveau Client",
+            text="Nouveau Client" if action == "Creer" else "Modifier client",
             font=("Arial", 18, "bold"),
             text_color="#1f2937"
         ).pack(side="left")
@@ -231,7 +232,7 @@ class ClientView(ctk.CTkFrame):
         form = ctk.CTkFrame(card, fg_color="transparent")
         form.pack(fill="both", expand=True, padx=20, pady=10)
 
-        def field(label, placeholder):
+        def field(label, placeholder, value):
             ctk.CTkLabel(
                 form,
                 text=label,
@@ -246,13 +247,17 @@ class ClientView(ctk.CTkFrame):
                 corner_radius=8
             )
             entry.pack(fill="x")
+
+            if action == "Modifier":
+                entry.insert(0, value)
             return entry
 
-        nom_entry = field("Nom *", "Nom du client")
-        entreprise_entry = field("Entreprise *", "Nom de l'entreprise")
-        email_entry = field("Email *", "email@exemple.fr")
-        tel_entry = field("Téléphone *", "01 23 45 67 89")
-        address_entry = field("Adresse *", "123, Rue ABC, 00000")
+        client = self.controller.get_client(index)
+        nom_entry = field("Nom *", "Nom du client", client["contact_name"])
+        entreprise_entry = field("Entreprise *", "Nom de l'entreprise", client["company_name"])
+        email_entry = field("Email *", "email@exemple.fr", client["email"])
+        tel_entry = field("Téléphone *", "01 23 45 67 89", client["phone"])
+        address_entry = field("Adresse *", "123, Rue ABC, 00000", client["address"])
 
         # =============================
         # Statut
@@ -264,7 +269,7 @@ class ClientView(ctk.CTkFrame):
             text_color="#374151"
         ).pack(anchor="w", pady=(10, 2))
 
-        statut_var = ctk.StringVar(value="prospect")
+        statut_var = ctk.StringVar(value="prospect" if action == "Creer" else client["statut"])
         statut_select = ctk.CTkOptionMenu(
             form,
             values=["prospect", "actif", "inactif"],
@@ -273,7 +278,6 @@ class ClientView(ctk.CTkFrame):
             corner_radius=8
         )
         statut_select.pack(fill="x")
-
         # =============================
         # Actions
         # =============================
@@ -296,14 +300,10 @@ class ClientView(ctk.CTkFrame):
             if client_data["nom"] == "" or client_data["entreprise"] == "" or client_data["email"] == "" or client_data["telephone"] == "" or client_data["address"] == "":
                 messagebox.showerror("ERREUR", "Tous les champs doivent etre remplis")
             else:
-                self.controller.add_client(
-                    client_data["entreprise"],
-                    client_data["nom"],
-                    client_data["email"],
-                    client_data["telephone"],
-                    client_data["address"],
-                    client_data["statut"]
-                )
+                if action == "Creer":
+                    self.controller.add_client(client_data)
+                else:
+                    self.controller.modify_client(index,client_data)
                 modal.destroy()
                 self.refresh_widgets()
 
@@ -321,7 +321,7 @@ class ClientView(ctk.CTkFrame):
 
         ctk.CTkButton(
             actions,
-            text="Créer",
+            text=action,
             height=38,
             fg_color="#4f46e5",
             hover_color="#4338ca",

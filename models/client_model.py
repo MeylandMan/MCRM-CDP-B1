@@ -48,15 +48,52 @@ class ClientModel:
         return client
 
     @staticmethod
-    def add_client(company_name, contact_name, email, phone, address, client_statut):
+    def add_client(client_data):
         conn = get_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
 
         query = """
         INSERT INTO client (company_name, contact_name, email, phone, address, statut) VALUES (%s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (company_name, contact_name, email, phone, address, client_statut,))
+        cursor.execute(
+            query,
+            (
+                client_data["entreprise"],
+                client_data["nom"],
+                client_data["email"],
+                client_data["phone"],
+                client_data["address"],
+                client_data["statut"],
+            )
+        )
         conn.commit()
 
         cursor.close()
         conn.close()
+
+    @staticmethod
+    def modify_client(index, client_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        UPDATE client SET company_name=%s, contact_name=%s, email=%s, phone=%s, address=%s, statut=%s WHERE id_client = %s
+        """
+
+        cursor.execute(
+            query,(
+                client_data["entreprise"],
+                client_data["nom"],
+                client_data["email"],
+                client_data["phone"],
+                client_data["address"],
+                client_data["statut"],
+                index,
+            )
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
