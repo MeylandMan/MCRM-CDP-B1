@@ -63,5 +63,16 @@ CREATE TABLE IF NOT EXISTS invoice (
         ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS movement (
+    id_movement INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    movement_text VARCHAR(100),
+    id_user INT NOT NULL,
+
+    FOREIGN KEY (id_user)
+        REFERENCES user(id_user)
+        ON DELETE CASCADE
+);
+
 CREATE INDEX idx_client_statut ON client(statut);
 CREATE INDEX idx_project_statut ON project(statut);
