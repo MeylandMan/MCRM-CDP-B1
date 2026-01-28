@@ -46,7 +46,8 @@ class ClientView(ctk.CTkFrame):
             fg_color="#4f46e5",
             hover_color="#4338ca",
             corner_radius=8,
-            height=38
+            height=38,
+            command=self.show_client_form
         ).pack(side="right")
 
         # ----------------------------
@@ -162,3 +163,156 @@ class ClientView(ctk.CTkFrame):
                 text_color="#991b1b"
             ).pack(side="left", padx=4)
 
+    def show_client_form(self):
+
+        # =============================
+        # Fenêtre modale
+        # =============================
+        modal = ctk.CTkToplevel(self.root)
+        modal.title("Nouveau client")
+        modal.geometry("420x720")
+        modal.resizable(False, False)
+        modal.transient(self.root)
+
+        modal.update()
+        modal.grab_set()  # bloque la fenêtre principale
+
+        modal.configure(fg_color="#f9fafb")
+        modal.attributes("-alpha", 0.95)
+
+        # Centre la fenêtre
+        modal.update_idletasks()
+        x = (modal.winfo_screenwidth() // 2) - (420 // 2)
+        y = (modal.winfo_screenheight() // 2) - (560 // 2)
+        modal.geometry(f"+{x}+{y}")
+
+        # =============================
+        # Carte blanche (contenu)
+        # =============================
+        card = ctk.CTkFrame(
+            modal,
+            fg_color="white",
+            corner_radius=12
+        )
+        card.pack(expand=True, padx=20, pady=20, fill="both")
+
+        # =============================
+        # Header
+        # =============================
+        header = ctk.CTkFrame(card, fg_color="transparent")
+        header.pack(fill="x", padx=20, pady=(20, 10))
+
+        ctk.CTkLabel(
+            header,
+            text="Nouveau Client",
+            font=("Arial", 18, "bold"),
+            text_color="#1f2937"
+        ).pack(side="left")
+
+        ctk.CTkButton(
+            header,
+            text="✕",
+            width=32,
+            height=32,
+            fg_color="transparent",
+            text_color="#6b7280",
+            hover_color="#e5e7eb",
+            command=modal.destroy
+        ).pack(side="right")
+
+        # =============================
+        # Formulaire
+        # =============================
+        form = ctk.CTkFrame(card, fg_color="transparent")
+        form.pack(fill="both", expand=True, padx=20, pady=10)
+
+        def field(label, placeholder):
+            ctk.CTkLabel(
+                form,
+                text=label,
+                font=("Arial", 12, "bold"),
+                text_color="#374151"
+            ).pack(anchor="w", pady=(10, 2))
+
+            entry = ctk.CTkEntry(
+                form,
+                placeholder_text=placeholder,
+                height=36,
+                corner_radius=8
+            )
+            entry.pack(fill="x")
+            return entry
+
+        nom_entry = field("Nom *", "Nom du client")
+        entreprise_entry = field("Entreprise *", "Nom de l'entreprise")
+        email_entry = field("Email *", "email@exemple.fr")
+        tel_entry = field("Téléphone *", "01 23 45 67 89")
+        address_entry = field("Adresse *", "123, Rue ABC, 00000")
+
+        # =============================
+        # Statut
+        # =============================
+        ctk.CTkLabel(
+            form,
+            text="Statut",
+            font=("Arial", 12, "bold"),
+            text_color="#374151"
+        ).pack(anchor="w", pady=(10, 2))
+
+        statut_var = ctk.StringVar(value="prospect")
+        statut_select = ctk.CTkOptionMenu(
+            form,
+            values=["prospect", "actif", "inactif"],
+            variable=statut_var,
+            height=36,
+            corner_radius=8
+        )
+        statut_select.pack(fill="x")
+
+        # =============================
+        # Actions
+        # =============================
+        actions = ctk.CTkFrame(card, fg_color="transparent")
+        actions.pack(fill="x", padx=20, pady=20)
+
+        def submit():
+            from datetime import datetime
+            from tkinter import messagebox
+            client_data = {
+                "nom": nom_entry.get(),
+                "entreprise": entreprise_entry.get(),
+                "email": email_entry.get(),
+                "telephone": tel_entry.get(),
+                "address": address_entry.get(),
+                "statut": statut_var.get(),
+                "dateCreation": datetime.now().strftime("%Y-%m-%d")
+            }
+
+            if client_data["nom"] == "" or client_data["entreprise"] == "" or client_data["email"] == "" or client_data["telephone"] == "" or client_data["address"] == "":
+                messagebox.showerror("ERREUR", "Tous les champs doivent etre remplis")
+            else:
+                # 🔗 Appel controller (plus tard)
+                print("CLIENT CRÉÉ :", client_data)
+                modal.destroy()
+
+        ctk.CTkButton(
+            actions,
+            text="Annuler",
+            height=38,
+            fg_color="white",
+            border_width=1,
+            border_color="#d1d5db",
+            text_color="#374151",
+            hover_color="#f3f4f6",
+            command=modal.destroy
+        ).pack(side="left", expand=True, fill="x", padx=(0, 8))
+
+        ctk.CTkButton(
+            actions,
+            text="Créer",
+            height=38,
+            fg_color="#4f46e5",
+            hover_color="#4338ca",
+            text_color="white",
+            command=submit
+        ).pack(side="left", expand=True, fill="x")
