@@ -24,3 +24,6 @@ class ClientController:
     @staticmethod
     def get_client(index):
         return ClientModel.get_client(index)
+
+    def add_client(self, company_name, contact_name, email, phone, address, client_statut):
+        ClientModel.add_client(company_name, contact_name, email, phone, address, client_statut)

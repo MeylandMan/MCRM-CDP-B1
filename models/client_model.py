@@ -46,3 +46,17 @@ class ClientModel:
         conn.close()
 
         return client
+
+    @staticmethod
+    def add_client(company_name, contact_name, email, phone, address, client_statut):
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        query = """
+        INSERT INTO client (company_name, contact_name, email, phone, address, statut) VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (company_name, contact_name, email, phone, address, client_statut,))
+        conn.commit()
+
+        cursor.close()
+        conn.close()

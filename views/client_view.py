@@ -8,6 +8,11 @@ class ClientView(ctk.CTkFrame):
 
         self.pack(fill="both", expand=True)
 
+    def refresh_widgets(self):
+        for widget in self.winfo_children():
+            widget.destroy()
+        self.create_widgets()
+
     def create_widgets(self):
         clients = self.controller.get_clients()
 
@@ -291,9 +296,16 @@ class ClientView(ctk.CTkFrame):
             if client_data["nom"] == "" or client_data["entreprise"] == "" or client_data["email"] == "" or client_data["telephone"] == "" or client_data["address"] == "":
                 messagebox.showerror("ERREUR", "Tous les champs doivent etre remplis")
             else:
-                # 🔗 Appel controller (plus tard)
-                print("CLIENT CRÉÉ :", client_data)
+                self.controller.add_client(
+                    client_data["entreprise"],
+                    client_data["nom"],
+                    client_data["email"],
+                    client_data["telephone"],
+                    client_data["address"],
+                    client_data["statut"]
+                )
                 modal.destroy()
+                self.refresh_widgets()
 
         ctk.CTkButton(
             actions,
