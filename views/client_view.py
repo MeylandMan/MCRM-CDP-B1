@@ -76,98 +76,106 @@ class ClientView(ctk.CTkFrame):
         list_frame.columnconfigure(1, weight=1)
         list_frame.pack(fill="both", expand=True, padx=10, pady=5)
 
+        class ClientCard:
+            def __init__(self, pos, view, index, company_name, contact_name, email, phone, address, client_statut, creation_date):
+                self.index = index
+
+                card = ctk.CTkFrame(list_frame, fg_color="white", corner_radius=12)
+                card.grid(row=pos // 2, column=pos % 2, padx=8, pady=8, sticky="nsew")
+
+                # Header carte
+                top = ctk.CTkFrame(card, fg_color="transparent")
+                top.pack(fill="x", padx=15, pady=(15, 5))
+
+                ctk.CTkLabel(
+                    top,
+                    text=company_name,
+                    font=("Arial", 15, "bold"),
+                    text_color="#111827"
+                ).pack(anchor="w")
+
+                ctk.CTkLabel(
+                    top,
+                    text=contact_name,
+                    font=("Arial", 12),
+                    text_color="#6b7280"
+                ).pack(anchor="w")
+
+                bg, fg = statut_colors[client_statut]
+                statut = ctk.CTkLabel(
+                    top,
+                    text=client_statut,
+                    fg_color=bg,
+                    text_color=fg,
+                    corner_radius=20,
+                    font=("Arial", 11, "bold"),
+                    width=80,
+                    height=24
+                )
+                statut.pack(anchor="ne")
+
+                # Infos
+                infos = ctk.CTkFrame(card, fg_color="transparent")
+                infos.pack(fill="x", padx=15, pady=10)
+
+                ctk.CTkLabel(
+                    infos,
+                    text=f"📍 {address}",
+                    font=("Arial", 12),
+                    text_color="#374151"
+                ).pack(anchor="w", pady=2)
+
+                ctk.CTkLabel(
+                    infos,
+                    text=f"📧 {email}",
+                    font=("Arial", 12),
+                    text_color="#374151"
+                ).pack(anchor="w", pady=2)
+
+                ctk.CTkLabel(
+                    infos,
+                    text=f"📞 {phone}",
+                    font=("Arial", 12),
+                    text_color="#374151"
+                ).pack(anchor="w", pady=2)
+
+                # Footer
+                footer = ctk.CTkFrame(card, fg_color="transparent")
+                footer.pack(fill="x", padx=15, pady=(5, 15))
+
+                ctk.CTkLabel(
+                    footer,
+                    text=f"Créé le {creation_date}",
+                    font=("Arial", 10),
+                    text_color="#9ca3af"
+                ).pack(side="left")
+
+                actions = ctk.CTkFrame(footer, fg_color="transparent")
+                actions.pack(side="right")
+
+                ctk.CTkButton(
+                    actions,
+                    text="✏️",
+                    width=36,
+                    height=32,
+                    fg_color="#eef2ff",
+                    text_color="#4f46e5",
+                    command=lambda: view.show_client_form("Modifier", self.index)
+                ).pack(side="left", padx=4)
+
+                ctk.CTkButton(
+                    actions,
+                    text="🗑️",
+                    width=36,
+                    height=32,
+                    fg_color="#fee2e2",
+                    text_color="#991b1b"
+                ).pack(side="left", padx=4)
+
+
+
         for i, (index, company_name, contact_name, email, phone, address, client_statut, creation_date) in enumerate(clients):
-            card = ctk.CTkFrame(list_frame, fg_color="white", corner_radius=12)
-            card.grid(row=i // 2, column=i % 2, padx=8, pady=8, sticky="nsew")
-
-            # Header carte
-            top = ctk.CTkFrame(card, fg_color="transparent")
-            top.pack(fill="x", padx=15, pady=(15, 5))
-
-            ctk.CTkLabel(
-                top,
-                text=company_name,
-                font=("Arial", 15, "bold"),
-                text_color="#111827"
-            ).pack(anchor="w")
-
-            ctk.CTkLabel(
-                top,
-                text=contact_name,
-                font=("Arial", 12),
-                text_color="#6b7280"
-            ).pack(anchor="w")
-
-            bg, fg = statut_colors[client_statut]
-            statut = ctk.CTkLabel(
-                top,
-                text=client_statut,
-                fg_color=bg,
-                text_color=fg,
-                corner_radius=20,
-                font=("Arial", 11, "bold"),
-                width=80,
-                height=24
-            )
-            statut.pack(anchor="ne")
-
-            # Infos
-            infos = ctk.CTkFrame(card, fg_color="transparent")
-            infos.pack(fill="x", padx=15, pady=10)
-
-            ctk.CTkLabel(
-                infos,
-                text=f"📍 {address}",
-                font=("Arial", 12),
-                text_color="#374151"
-            ).pack(anchor="w", pady=2)
-
-            ctk.CTkLabel(
-                infos,
-                text=f"📧 {email}",
-                font=("Arial", 12),
-                text_color="#374151"
-            ).pack(anchor="w", pady=2)
-
-            ctk.CTkLabel(
-                infos,
-                text=f"📞 {phone}",
-                font=("Arial", 12),
-                text_color="#374151"
-            ).pack(anchor="w", pady=2)
-
-            # Footer
-            footer = ctk.CTkFrame(card, fg_color="transparent")
-            footer.pack(fill="x", padx=15, pady=(5, 15))
-
-            ctk.CTkLabel(
-                footer,
-                text=f"Créé le {creation_date}",
-                font=("Arial", 10),
-                text_color="#9ca3af"
-            ).pack(side="left")
-
-            actions = ctk.CTkFrame(footer, fg_color="transparent")
-            actions.pack(side="right")
-
-            ctk.CTkButton(
-                actions,
-                text="✏️",
-                width=36,
-                height=32,
-                fg_color="#eef2ff",
-                text_color="#4f46e5",
-                command=lambda:self.show_client_form("Modifier", index)
-            ).pack(side="left", padx=4)
-
-            ctk.CTkButton(
-                actions,
-                text="🗑️",
-                width=36,
-                height=32,
-                fg_color="#fee2e2",
-                text_color="#991b1b"
-            ).pack(side="left", padx=4)
+            ClientCard(i, self, index, company_name, contact_name, email, phone, address, client_statut, creation_date)
 
     def show_client_form(self, action: str, index):
 

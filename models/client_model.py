@@ -61,7 +61,7 @@ class ClientModel:
                 client_data["entreprise"],
                 client_data["nom"],
                 client_data["email"],
-                client_data["phone"],
+                client_data["telephone"],
                 client_data["address"],
                 client_data["statut"],
             )
@@ -85,7 +85,7 @@ class ClientModel:
                 client_data["entreprise"],
                 client_data["nom"],
                 client_data["email"],
-                client_data["phone"],
+                client_data["telephone"],
                 client_data["address"],
                 client_data["statut"],
                 index,
