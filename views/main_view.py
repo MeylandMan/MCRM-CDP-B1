@@ -65,8 +65,7 @@ class MainView(ctk.CTkFrame):
                 ("projects", "Projets"),
                 ("invoices", "Devis"),
                 ("contacts", "Contacts"),
-                ("contacts", "Contacts"),
-                ("user", "Utilisateurs"),
+                ("users", "Utilisateurs"),
             ]
         else:
             menu_items = [
@@ -323,6 +322,17 @@ class MainView(ctk.CTkFrame):
     # -------------------------------------------------
     # Contacts Home
     # -------------------------------------------------
+    def show_users_home(self):
+        self.clear_content()
+        self.page_title.configure(text="Utilisateurs")
+
+        from controllers.user_controller import UserController
+        user_controller = UserController(self.content)
+        user_controller.show_users()
+
+    # -------------------------------------------------
+    # Users Home
+    # -------------------------------------------------
     def show_contacts_home(self):
         self.clear_content()
         self.page_title.configure(text="Contacts")
@@ -351,6 +361,8 @@ class MainView(ctk.CTkFrame):
                 self.show_invoices_home()
             case "contacts":
                 self.show_contacts_home()
+            case "users":
+                self.show_users_home()
             case _:
                 self.clear_content()
                 self.page_title.configure(text=page.capitalize())

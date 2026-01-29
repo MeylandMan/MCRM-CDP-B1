@@ -66,6 +66,9 @@ class ClientModel:
                 client_data["statut"],
             )
         )
+
+        cursor.execute("INSERT INTO movement (movement_text) VALUES ('Client ajouté : %s')", (client_data["entreprise"],))
+
         conn.commit()
 
         cursor.close()
@@ -92,6 +95,8 @@ class ClientModel:
             )
         )
 
+        cursor.execute("INSERT INTO movement (movement_text) VALUES ('Client modifié : %s')", (client_data["entreprise"],))
+
         conn.commit()
 
         cursor.close()
@@ -106,6 +111,9 @@ class ClientModel:
         DELETE FROM client WHERE id_client=%s
         """
 
+        from controllers.client_controller import ClientController
+        cursor.execute("INSERT INTO movement (movement_text) VALUES ('Client retiré : %s')",
+                       (ClientController.get_client(index)["company_name"],))
         cursor.execute(query, (index,))
 
         conn.commit()
