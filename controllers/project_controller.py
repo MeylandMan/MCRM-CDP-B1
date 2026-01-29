@@ -31,3 +31,7 @@ class ProjectController:
 
     def modify_project(self, index, project_data):
         ProjectModel.modify_project(index, project_data)
+
+    @staticmethod
+    def delete_project(index):
+        ProjectModel.delete_project(index)

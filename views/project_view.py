@@ -3,6 +3,16 @@ import customtkinter as ctk
 from controllers.client_controller import ClientController
 
 
+
+def show_delete_project_panel(index, view):
+    from tkinter import messagebox
+    response = messagebox.askquestion("Delete confirmation", "Voulez vous VRAIMENT supprimer ce projet ?")
+
+    if response == "yes":
+        from controllers.project_controller import ProjectController
+        ProjectController.delete_project(index)
+        view.refresh_widgets()
+
 class ProjectView(ctk.CTkFrame):
     def __init__(self, root, controller):
         super().__init__(root, fg_color="transparent")
@@ -178,7 +188,8 @@ class ProjectView(ctk.CTkFrame):
                     width=36,
                     height=32,
                     fg_color="#fee2e2",
-                    text_color="#991b1b"
+                    text_color="#991b1b",
+                    command=lambda: show_delete_project_panel(self.index, view)
                 ).pack(side="left", padx=4)
 
         for i, (index, name, desc, start_date, end_date, project_statut, id_project) in enumerate(projects):

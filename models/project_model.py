@@ -102,3 +102,17 @@ class ProjectModel:
 
         cursor.close()
         conn.close()
+
+    @staticmethod
+    def delete_project(index):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """DELETE FROM project WHERE id_project = %s"""
+
+        cursor.execute(query, (index,))
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
