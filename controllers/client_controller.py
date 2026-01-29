@@ -30,3 +30,7 @@ class ClientController:
 
     def modify_client(self, index, client_data):
         ClientModel.modify_client(index, client_data)
+
+    @staticmethod
+    def delete_client(index):
+        ClientModel.delete_client(index)

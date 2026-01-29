@@ -97,3 +97,19 @@ class ClientModel:
         cursor.close()
         conn.close()
 
+    @staticmethod
+    def delete_client(index):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        DELETE FROM client WHERE id_client=%s
+        """
+
+        cursor.execute(query, (index,))
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+

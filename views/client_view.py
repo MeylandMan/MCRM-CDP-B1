@@ -1,5 +1,16 @@
 import customtkinter as ctk
 
+
+def show_delete_client_panel(index, view):
+    from tkinter import messagebox
+    response = messagebox.askquestion("Delete confirmation", "Voulez vous VRAIMENT supprimer ce client ?")
+
+    if response == "yes":
+        from controllers.client_controller import ClientController
+        ClientController.delete_client(index)
+        view.refresh_widgets()
+
+
 class ClientView(ctk.CTkFrame):
     def __init__(self, root, controller):
         super().__init__(root, fg_color="transparent")
@@ -169,10 +180,9 @@ class ClientView(ctk.CTkFrame):
                     width=36,
                     height=32,
                     fg_color="#fee2e2",
-                    text_color="#991b1b"
+                    text_color="#991b1b",
+                    command=lambda: show_delete_client_panel(self.index, view)
                 ).pack(side="left", padx=4)
-
-
 
         for i, (index, company_name, contact_name, email, phone, address, client_statut, creation_date) in enumerate(clients):
             ClientCard(i, self, index, company_name, contact_name, email, phone, address, client_statut, creation_date)
@@ -261,11 +271,11 @@ class ClientView(ctk.CTkFrame):
             return entry
 
         client = self.controller.get_client(index)
-        nom_entry = field("Nom *", "Nom du client", client["contact_name"])
-        entreprise_entry = field("Entreprise *", "Nom de l'entreprise", client["company_name"])
-        email_entry = field("Email *", "email@exemple.fr", client["email"])
-        tel_entry = field("Téléphone *", "01 23 45 67 89", client["phone"])
-        address_entry = field("Adresse *", "123, Rue ABC, 00000", client["address"])
+        nom_entry = field("Nom *", "Nom du client", client["contact_name"] if client else -1)
+        entreprise_entry = field("Entreprise *", "Nom de l'entreprise", client["company_name"] if client else -1)
+        email_entry = field("Email *", "email@exemple.fr", client["email"] if client else -1)
+        tel_entry = field("Téléphone *", "01 23 45 67 89", client["phone"] if client else -1)
+        address_entry = field("Adresse *", "123, Rue ABC, 00000", client["address"] if client else -1)
 
         # =============================
         # Statut
