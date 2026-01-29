@@ -27,3 +27,7 @@ class ContactController:
 
     def modify_contact(self, index, contact_data):
         ContactModel.modify_contact(index, contact_data)
+
+    @staticmethod
+    def delete_contact(index):
+        ContactModel.delete_contact(index)

@@ -1,5 +1,14 @@
 import customtkinter as ctk
 
+def show_delete_contact_panel(index, view):
+    from tkinter import messagebox
+    response = messagebox.askquestion("Delete confirmation", "Voulez vous VRAIMENT supprimer ce contact ?")
+
+    if response == "yes":
+        from controllers.contact_controller import ContactController
+        ContactController.delete_contact(index)
+        view.refresh_widgets()
+
 class ContactView(ctk.CTkFrame):
     def __init__(self, root, controller):
         super().__init__(root, fg_color="transparent")
@@ -157,7 +166,7 @@ class ContactView(ctk.CTkFrame):
                 actions = ctk.CTkFrame(card, fg_color="transparent")
                 actions.pack(fill="x", padx=15, pady=(8, 15))
 
-                for icon, color, func in [("✏️", "#eef2ff", lambda:view.show_contact_form("Modifier", index)), ("🗑️", "#fee2e2", lambda:print("Removed Contact"))]:
+                for icon, color, func in [("✏️", "#eef2ff", lambda:view.show_contact_form("Modifier", index)), ("🗑️", "#fee2e2", lambda:show_delete_contact_panel(index, view))]:
                     ctk.CTkButton(
                         actions,
                         text=icon,

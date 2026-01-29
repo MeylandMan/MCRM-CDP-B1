@@ -106,3 +106,17 @@ class ContactModel:
 
         cursor.close()
         conn.close()
+
+    @staticmethod
+    def delete_contact(index):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """DELETE FROM contact WHERE id_contact = %s"""
+
+        cursor.execute(query, (index,))
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
