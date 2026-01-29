@@ -21,3 +21,9 @@ class ContactController:
 
     def get_contact(self, index):
         return ContactModel.get_contact(index)
+
+    def add_contact(self, contact_data):
+        ContactModel.add_contact(contact_data)
+
+    def modify_contact(self, index, contact_data):
+        ContactModel.modify_contact(index, contact_data)

@@ -45,3 +45,64 @@ class ContactModel:
         conn.close()
 
         return contact
+
+    @staticmethod
+    def add_contact(contact_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+                INSERT INTO contact (first_name, last_name, email, phone, company_name, company_role, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s) \
+                """
+        cursor.execute(
+            query,
+            (
+                contact_data["nom"],
+                contact_data["prenom"],
+                contact_data["email"],
+                contact_data["telephone"],
+                contact_data["company_name"],
+                contact_data["company_role"],
+                contact_data["notes"],
+            )
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+    @staticmethod
+    def modify_contact(index, contact_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+                UPDATE contact \
+                SET first_name=%s, 
+                    last_name=%s, 
+                    email=%s,
+                    phone=%s,
+                    company_name=%s,
+                    company_role=%s,
+                    notes=%s
+                WHERE id_contact = %s \
+                """
+
+        cursor.execute(
+            query, (
+                contact_data["nom"],
+                contact_data["prenom"],
+                contact_data["email"],
+                contact_data["telephone"],
+                contact_data["company_name"],
+                contact_data["company_role"],
+                contact_data["notes"],
+                index,
+            )
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()

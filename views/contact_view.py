@@ -77,7 +77,7 @@ class ContactView(ctk.CTkFrame):
         # Contact cards
         # -----------------------------
         class ContactCard:
-            def __init__(self, row, col, index, first_name, last_name, email, phone, company_name, company_role, contact_notes):
+            def __init__(self, view, row, col, index, first_name, last_name, email, phone, company_name, company_role, contact_notes):
                 card = ctk.CTkFrame(
                     grid,
                     fg_color="white",
@@ -157,20 +157,21 @@ class ContactView(ctk.CTkFrame):
                 actions = ctk.CTkFrame(card, fg_color="transparent")
                 actions.pack(fill="x", padx=15, pady=(8, 15))
 
-                for icon, color in [("✏️", "#eef2ff"), ("🗑️", "#fee2e2")]:
+                for icon, color, func in [("✏️", "#eef2ff", lambda:view.show_contact_form("Modifier", index)), ("🗑️", "#fee2e2", lambda:print("Removed Contact"))]:
                     ctk.CTkButton(
                         actions,
                         text=icon,
                         width=40,
                         height=32,
                         fg_color=color,
-                        text_color="#111827"
+                        text_color="#111827",
+                        command=func
                     ).pack(side="left", expand=True, padx=4)
 
         for i, (index, first_name, last_name, email, phone, company_name, company_role, contact_notes) in enumerate(contacts):
             row = i // columns
             col = i % columns
-            ContactCard(row, col, index, first_name, last_name, email, phone, company_name, company_role, contact_notes)
+            ContactCard(self, row, col, index, first_name, last_name, email, phone, company_name, company_role, contact_notes)
 
     def show_contact_form(self, action: str, index):
 
@@ -252,17 +253,17 @@ class ContactView(ctk.CTkFrame):
                 entry.pack(fill="x")
 
                 if action == "Modifier":
-                    entry.insert(0, value)
+                    entry.insert(0, value if value else "")
                 return entry
 
             contact = self.controller.get_contact(index)
-            nom_entry = field("Nom *", "Nom du contact", contact["contact_name"] if contact else -1)
-            prenom_entry = field("Prenom *", "Prenom du contact", contact["company_name"] if contact else -1)
+            nom_entry = field("Nom *", "Nom du contact", contact["first_name"] if contact else -1)
+            prenom_entry = field("Prenom *", "Prenom du contact", contact["last_name"] if contact else -1)
             email_entry = field("Email *", "email@exemple.fr", contact["email"] if contact else -1)
             tel_entry = field("Téléphone *", "01 23 45 67 89", contact["phone"] if contact else -1)
-            company_name_entry = field("Nom de l'entreprise *", "ABC Company", contact["address"] if contact else -1)
-            company_role = field("Role dans l'entreprise *", "PDG", contact["address"] if contact else -1)
-            notes = field("Notes", "Decrivez le contact", contact["address"] if contact else -1)
+            company_name_entry = field("Nom de l'entreprise *", "ABC Company", contact["company_name"] if contact else -1)
+            company_role = field("Role dans l'entreprise *", "PDG", contact["company_role"] if contact else -1)
+            notes = field("Notes", "Decrivez le contact", contact["notes"] if contact else -1)
 
             # =============================
             # Actions
