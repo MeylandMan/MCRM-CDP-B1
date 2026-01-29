@@ -18,3 +18,6 @@ class ContactController:
     @staticmethod
     def get_contacts():
         return ContactModel.get_contacts()
+
+    def get_contact(self, index):
+        return ContactModel.get_contact(index)

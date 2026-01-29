@@ -1,4 +1,5 @@
 from config import get_connection
+import pymysql
 
 class ContactModel:
 
@@ -30,3 +31,17 @@ class ContactModel:
         conn.close()
 
         return contacts
+
+    @staticmethod
+    def get_contact(index):
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        cursor.execute("SELECT * FROM contact WHERE id_contact = %s", (index,))
+
+        contact = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return contact
