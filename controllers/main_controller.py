@@ -13,8 +13,7 @@ class MainController:
             widget.destroy()
 
         from views.main_view import MainView
-        user_details = f"{self.user["first_name"]} ({self.user["role_user"]})"
-        self.view = MainView(self.root, user_details, self)
+        self.view = MainView(self.root, self.user["first_name"], self.user["role_user"], self)
 
         self.root.title("Wemby - Accueil")
 

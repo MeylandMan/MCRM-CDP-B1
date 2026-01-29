@@ -3,9 +3,10 @@ import customtkinter as ctk
 from controllers.invoice_controller import InvoiceController
 
 class MainView(ctk.CTkFrame):
-    def __init__(self, root, user_role, controller):
+    def __init__(self, root, user_name, user_role, controller):
         super().__init__(root)
         self.root = root
+        self.user_name = user_name
         self.user_role = user_role
         self.controller = controller
 
@@ -47,7 +48,7 @@ class MainView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             self.sidebar,
-            text=self.user_role,
+            text=f"{self.user_name} ({self.user_role})",
             font=("Arial", 12),
             text_color="#c7d2fe"
         ).pack(pady=(0, 25))
@@ -55,13 +56,26 @@ class MainView(ctk.CTkFrame):
         # Menu
         self.menu_buttons = {}
 
-        menu_items = [
-            ("dashboard", "Tableau de bord"),
-            ("clients", "Clients"),
-            ("projects", "Projets"),
-            ("invoices", "Devis"),
-            ("contacts", "Contacts"),
-        ]
+        menu_items = None
+        print(self.user_role)
+        if self.user_role == "admin":
+            menu_items = [
+                ("dashboard", "Tableau de bord"),
+                ("clients", "Clients"),
+                ("projects", "Projets"),
+                ("invoices", "Devis"),
+                ("contacts", "Contacts"),
+                ("contacts", "Contacts"),
+                ("user", "Utilisateurs"),
+            ]
+        else:
+            menu_items = [
+                ("dashboard", "Tableau de bord"),
+                ("clients", "Clients"),
+                ("projects", "Projets"),
+                ("invoices", "Devis"),
+                ("contacts", "Contacts"),
+            ]
 
         for key, label in menu_items:
             btn = ctk.CTkButton(
