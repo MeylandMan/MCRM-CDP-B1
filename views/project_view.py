@@ -60,111 +60,117 @@ class ProjectView(ctk.CTkFrame):
         list_frame = ctk.CTkFrame(self, fg_color="transparent")
         list_frame.pack(fill="both", expand=True, padx=5)
 
-        for i, (index, name, desc, start_date, end_date, project_statut, id_client) in enumerate(projects):
-            card = ctk.CTkFrame(
-                list_frame,
-                fg_color="white",
-                corner_radius=12
-            )
-            card.pack(fill="x", padx=10, pady=8)
+        class ProjectCard:
+            def __init__(self, index, name, desc, start_date, end_date, project_statut, id_client):
+                self.index = index
 
-            # -----------------------------
-            # Top (nom + badge)
-            # -----------------------------
-            top = ctk.CTkFrame(card, fg_color="transparent")
-            top.pack(fill="x", padx=20, pady=(15, 5))
+                card = ctk.CTkFrame(
+                    list_frame,
+                    fg_color="white",
+                    corner_radius=12
+                )
+                card.pack(fill="x", padx=10, pady=8)
 
-            left_top = ctk.CTkFrame(top, fg_color="transparent")
-            left_top.pack(side="left", fill="x", expand=True)
+                # -----------------------------
+                # Top (nom + badge)
+                # -----------------------------
+                top = ctk.CTkFrame(card, fg_color="transparent")
+                top.pack(fill="x", padx=20, pady=(15, 5))
 
-            ctk.CTkLabel(
-                left_top,
-                text=name,
-                font=("Arial", 16, "bold"),
-                text_color="#111827"
-            ).pack(anchor="w")
+                left_top = ctk.CTkFrame(top, fg_color="transparent")
+                left_top.pack(side="left", fill="x", expand=True)
 
-            from controllers.client_controller import ClientController
-            ctk.CTkLabel(
-                left_top,
-                text=f"Client : {ClientController.get_client(id_client)["contact_name"]}",
-                font=("Arial", 12),
-                text_color="#6b7280"
-            ).pack(anchor="w", pady=(2, 0))
+                ctk.CTkLabel(
+                    left_top,
+                    text=name,
+                    font=("Arial", 16, "bold"),
+                    text_color="#111827"
+                ).pack(anchor="w")
 
-            # Badge statut
-            statut_colors = {
-                "en cours": ("#dbeafe", "#1e40af"),
-                "terminé": ("#dcfce7", "#166534"),
-                "en attente": ("#fef9c3", "#854d0e")
-            }
+                from controllers.client_controller import ClientController
+                ctk.CTkLabel(
+                    left_top,
+                    text=f"Client : {ClientController.get_client(id_client)["contact_name"]}",
+                    font=("Arial", 12),
+                    text_color="#6b7280"
+                ).pack(anchor="w", pady=(2, 0))
 
-            bg, fg = statut_colors.get(project_statut, ("#e5e7eb", "#374151"))
+                # Badge statut
+                statut_colors = {
+                    "en cours": ("#dbeafe", "#1e40af"),
+                    "terminé": ("#dcfce7", "#166534"),
+                    "en attente": ("#fef9c3", "#854d0e")
+                }
 
-            ctk.CTkLabel(
-                top,
-                text=project_statut,
-                fg_color=bg,
-                text_color=fg,
-                corner_radius=20,
-                font=("Arial", 11, "bold"),
-                padx=12,
-                pady=4
-            ).pack(side="right")
+                bg, fg = statut_colors.get(project_statut, ("#e5e7eb", "#374151"))
 
-            # -----------------------------
-            # Description
-            # -----------------------------
-            ctk.CTkLabel(
-                card,
-                text=desc,
-                font=("Arial", 12),
-                text_color="#374151",
-                wraplength=900,
-                justify="left"
-            ).pack(padx=20, pady=8, anchor="w")
+                ctk.CTkLabel(
+                    top,
+                    text=project_statut,
+                    fg_color=bg,
+                    text_color=fg,
+                    corner_radius=20,
+                    font=("Arial", 11, "bold"),
+                    padx=12,
+                    pady=4
+                ).pack(side="right")
 
-            # -----------------------------
-            # dates
-            # -----------------------------
-            infos = ctk.CTkFrame(card, fg_color="transparent")
-            infos.pack(fill="x", padx=20, pady=(5, 10))
+                # -----------------------------
+                # Description
+                # -----------------------------
+                ctk.CTkLabel(
+                    card,
+                    text=desc,
+                    font=("Arial", 12),
+                    text_color="#374151",
+                    wraplength=900,
+                    justify="left"
+                ).pack(padx=20, pady=8, anchor="w")
 
-            ctk.CTkLabel(
-                infos,
-                text=f"Début : {start_date}",
-                font=("Arial", 11),
-                text_color="#6b7280"
-            ).pack(side="left", padx=(0, 15))
+                # -----------------------------
+                # dates
+                # -----------------------------
+                infos = ctk.CTkFrame(card, fg_color="transparent")
+                infos.pack(fill="x", padx=20, pady=(5, 10))
 
-            if end_date:
                 ctk.CTkLabel(
                     infos,
-                    text=f"Fin : {end_date}",
+                    text=f"Début : {start_date}",
                     font=("Arial", 11),
                     text_color="#6b7280"
                 ).pack(side="left", padx=(0, 15))
 
-            # -----------------------------
-            # Actions
-            # -----------------------------
-            actions = ctk.CTkFrame(card, fg_color="transparent")
-            actions.pack(anchor="e", padx=20, pady=(0, 15))
+                if end_date:
+                    ctk.CTkLabel(
+                        infos,
+                        text=f"Fin : {end_date}",
+                        font=("Arial", 11),
+                        text_color="#6b7280"
+                    ).pack(side="left", padx=(0, 15))
 
-            ctk.CTkButton(
-                actions,
-                text="✏️",
-                width=36,
-                height=32,
-                fg_color="#eef2ff",
-                text_color="#4f46e5"
-            ).pack(side="left", padx=4)
+                # -----------------------------
+                # Actions
+                # -----------------------------
+                actions = ctk.CTkFrame(card, fg_color="transparent")
+                actions.pack(anchor="e", padx=20, pady=(0, 15))
 
-            ctk.CTkButton(
-                actions,
-                text="🗑️",
-                width=36,
-                height=32,
-                fg_color="#fee2e2",
-                text_color="#991b1b"
-            ).pack(side="left", padx=4)
+                ctk.CTkButton(
+                    actions,
+                    text="✏️",
+                    width=36,
+                    height=32,
+                    fg_color="#eef2ff",
+                    text_color="#4f46e5"
+                ).pack(side="left", padx=4)
+
+                ctk.CTkButton(
+                    actions,
+                    text="🗑️",
+                    width=36,
+                    height=32,
+                    fg_color="#fee2e2",
+                    text_color="#991b1b"
+                ).pack(side="left", padx=4)
+
+        for i, (index, name, desc, start_date, end_date, project_statut, id_client) in enumerate(projects):
+            ProjectCard(index, name, desc, start_date, end_date, project_statut, id_client)
