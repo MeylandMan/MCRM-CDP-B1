@@ -69,3 +69,36 @@ class ProjectModel:
 
         cursor.close()
         conn.close()
+
+    @staticmethod
+    def modify_project(index, project_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+                UPDATE project \
+                SET project_name=%s, \
+                    description=%s, \
+                    start_date=%s, \
+                    end_date=%s, \
+                    statut=%s, \
+                    id_client=%s
+                WHERE id_project = %s
+                """
+
+        cursor.execute(
+            query, (
+                project_data["project_name"],
+                project_data["description"],
+                project_data["start_date"],
+                project_data["end_date"],
+                project_data["statut"],
+                project_data["id_client"],
+                index,
+            )
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()

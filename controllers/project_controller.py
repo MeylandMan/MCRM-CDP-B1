@@ -28,3 +28,6 @@ class ProjectController:
     @staticmethod
     def add_project(project_data):
         ProjectModel.add_project(project_data)
+
+    def modify_project(self, index, project_data):
+        ProjectModel.modify_project(index, project_data)

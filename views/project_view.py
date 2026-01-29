@@ -254,7 +254,7 @@ class ProjectView(ctk.CTkFrame):
                 corner_radius=8
             )
             entry.pack(fill="x")
-            
+
             if action == "Modifier":
                 entry.insert(0, value if value else "")
 
