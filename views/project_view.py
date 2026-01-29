@@ -11,6 +11,11 @@ class ProjectView(ctk.CTkFrame):
 
         self.pack(fill="both", expand=True)
 
+    def refresh_widgets(self):
+        for widget in self.winfo_children():
+            widget.destroy()
+        self.create_widgets()
+
     def create_widgets(self):
         projects = self.controller.get_projects()
 
@@ -65,7 +70,7 @@ class ProjectView(ctk.CTkFrame):
         list_frame.pack(fill="both", expand=True, padx=5)
 
         class ProjectCard:
-            def __init__(self, index, name, desc, start_date, end_date, project_statut, id_client):
+            def __init__(self, view, index, name, desc, start_date, end_date, project_statut, id_client):
                 self.index = index
 
                 card = ctk.CTkFrame(
@@ -163,7 +168,8 @@ class ProjectView(ctk.CTkFrame):
                     width=36,
                     height=32,
                     fg_color="#eef2ff",
-                    text_color="#4f46e5"
+                    text_color="#4f46e5",
+                    command=lambda: view.show_project_form("Modifier", index)
                 ).pack(side="left", padx=4)
 
                 ctk.CTkButton(
@@ -176,7 +182,7 @@ class ProjectView(ctk.CTkFrame):
                 ).pack(side="left", padx=4)
 
         for i, (index, name, desc, start_date, end_date, project_statut, id_project) in enumerate(projects):
-            ProjectCard(index, name, desc, start_date, end_date, project_statut, id_project)
+            ProjectCard(self, index, name, desc, start_date, end_date, project_statut, id_project)
 
     def show_project_form(self, action: str, index=None):
 
@@ -248,9 +254,9 @@ class ProjectView(ctk.CTkFrame):
                 corner_radius=8
             )
             entry.pack(fill="x")
-
+            
             if action == "Modifier":
-                entry.insert(0, value)
+                entry.insert(0, value if value else "")
 
             return entry
 
@@ -303,7 +309,7 @@ class ProjectView(ctk.CTkFrame):
 
         from controllers.project_controller import ProjectController
         current_project = ProjectController.get_project(index)
-        project_client = ClientController.get_client(current_project["id_client"]) if index != -1 else None
+        project_client = ClientController.get_client(current_project["id_client"])["company_name"] if index != -1 else None
 
         client_var = ctk.StringVar(
             value=client_names[0] if action == "Creer" else project_client
@@ -360,7 +366,7 @@ class ProjectView(ctk.CTkFrame):
                 "start_date": start_entry.get() or None,
                 "end_date": end_entry.get() or None,
                 "statut": statut_var.get(),
-                "id_client": selected_client["id_client"]
+                "id_client": selected_client[0]
             }
 
             if project_data["project_name"] == "":

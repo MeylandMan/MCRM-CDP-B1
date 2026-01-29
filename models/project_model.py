@@ -45,3 +45,27 @@ class ProjectModel:
         conn.close()
 
         return project
+
+    @staticmethod
+    def add_project(project_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        INSERT INTO project (project_name, description, start_date, end_date, statut, id_client) VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(
+            query,
+            (
+                project_data["project_name"],
+                project_data["description"],
+                project_data["start_date"],
+                project_data["end_date"],
+                project_data["statut"],
+                project_data["id_client"],
+            )
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
