@@ -14,6 +14,7 @@ class ContactView(ctk.CTkFrame):
         super().__init__(root, fg_color="transparent")
         self.root = root
         self.controller = controller
+        self.search_value = None
 
         self.pack(fill="both", expand=True)
     
@@ -26,7 +27,7 @@ class ContactView(ctk.CTkFrame):
         # -----------------------------
         # Mock contacts
         # -----------------------------
-        contacts = self.controller.get_contacts()
+        contacts = self.controller.get_contacts(self.search_value)
 
         # -----------------------------
         # Header
@@ -63,14 +64,21 @@ class ContactView(ctk.CTkFrame):
         # -----------------------------
         # Search bar
         # -----------------------------
-        search = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
-        search.pack(fill="x", padx=10, pady=10)
+        search_card = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
+        search_card.pack(fill="x", padx=10, pady=10)
 
-        ctk.CTkEntry(
-            search,
-            placeholder_text="Rechercher un contact...",
-            height=38
-        ).pack(fill="x", padx=15, pady=12)
+        self.search_entry = ctk.CTkEntry(
+            search_card,
+            placeholder_text="🔍 Rechercher un contact...",
+            height=36
+        )
+        self.search_entry.pack(fill="x", padx=15, pady=15)
+
+        def search_contact():
+            self.search_value = self.search_entry.get()
+            self.refresh_widgets()
+
+        self.search_entry.bind("<Return>", lambda event: search_contact())
 
         # -----------------------------
         # Grid container

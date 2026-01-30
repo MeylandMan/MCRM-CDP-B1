@@ -120,3 +120,19 @@ class ContactModel:
 
         cursor.close()
         conn.close()
+
+    @staticmethod
+    def search_contacts_by_name(search_term):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        filter_value = f"{search_term}%"
+
+        query = "SELECT * FROM contact WHERE last_name LIKE %s"
+
+        cursor.execute(query, (filter_value,))
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return results

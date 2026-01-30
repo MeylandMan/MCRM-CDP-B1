@@ -16,8 +16,11 @@ class ContactController:
         return ContactModel.get_contacts_count(condition)
 
     @staticmethod
-    def get_contacts():
-        return ContactModel.get_contacts()
+    def get_contacts(search_term):
+        if not search_term:
+            return ContactModel.get_contacts()
+        else:
+            return ContactModel.search_contacts_by_name(search_term)
 
     def get_contact(self, index):
         return ContactModel.get_contact(index)
