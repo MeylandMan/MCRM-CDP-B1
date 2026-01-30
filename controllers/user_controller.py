@@ -18,8 +18,11 @@ class UserController:
         return UserModel.get_user_count(condition)
 
     @staticmethod
-    def get_users():
-        return UserModel.get_users()
+    def get_users(search_term):
+        if not search_term:
+            return UserModel.get_users()
+        else:
+            return UserModel.search_users_by_name(search_term)
 
     @staticmethod
     def get_user(index):

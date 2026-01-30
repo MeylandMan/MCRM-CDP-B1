@@ -111,3 +111,19 @@ class UserModel:
         cursor.close()
         conn.close()
 
+    @staticmethod
+    def search_users_by_name(search_term):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        filter_value = f"{search_term}%"
+
+        query = "SELECT * FROM user WHERE last_name LIKE %s"
+
+        cursor.execute(query, (filter_value,))
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return results
+

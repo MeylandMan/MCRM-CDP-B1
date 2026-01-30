@@ -16,6 +16,7 @@ class UserView(ctk.CTkFrame):
         super().__init__(root, fg_color="transparent")
         self.root = root
         self.controller = controller
+        self.search_value = None
 
         self.pack(fill="both", expand=True)
 
@@ -28,7 +29,7 @@ class UserView(ctk.CTkFrame):
         # -----------------------------
         # Mock users
         # -----------------------------
-        users = self.controller.get_users()
+        users = self.controller.get_users(self.search_value)
 
         # -----------------------------
         # Header
@@ -65,14 +66,21 @@ class UserView(ctk.CTkFrame):
         # -----------------------------
         # Search bar
         # -----------------------------
-        search = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
-        search.pack(fill="x", padx=10, pady=10)
+        search_card = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
+        search_card.pack(fill="x", padx=10, pady=10)
 
-        ctk.CTkEntry(
-            search,
-            placeholder_text="Rechercher un utilisateur...",
-            height=38
-        ).pack(fill="x", padx=15, pady=12)
+        self.search_entry = ctk.CTkEntry(
+            search_card,
+            placeholder_text="🔍 Rechercher un utilisateur...",
+            height=36
+        )
+        self.search_entry.pack(fill="x", padx=15, pady=15)
+
+        def search_user():
+            self.search_value = self.search_entry.get()
+            self.refresh_widgets()
+
+        self.search_entry.bind("<Return>", lambda event: search_user())
 
         # -----------------------------
         # Grid container
@@ -258,7 +266,7 @@ class UserView(ctk.CTkFrame):
 
         # =============================
         # User role
-        # =============================
+        # =============================company_name
         ctk.CTkLabel(
             form,
             text="Role",
