@@ -126,7 +126,7 @@ class MainView(ctk.CTkFrame):
     # Contenu principal
     # -------------------------------------------------
     def create_content(self):
-        self.content = ctk.CTkFrame(
+        self.content = ctk.CTkScrollableFrame(
             self,
             fg_color="#f9fafb"
         )

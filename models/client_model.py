@@ -67,8 +67,6 @@ class ClientModel:
             )
         )
 
-        cursor.execute("INSERT INTO movement (movement_text) VALUES ('Client ajouté : %s')", (client_data["entreprise"],))
-
         conn.commit()
 
         cursor.close()
@@ -95,8 +93,6 @@ class ClientModel:
             )
         )
 
-        cursor.execute("INSERT INTO movement (movement_text) VALUES ('Client modifié : %s')", (client_data["entreprise"],))
-
         conn.commit()
 
         cursor.close()
@@ -107,17 +103,36 @@ class ClientModel:
         conn = get_connection()
         cursor = conn.cursor()
 
-        query = """
-        DELETE FROM client WHERE id_client=%s
-        """
-
         from controllers.client_controller import ClientController
-        cursor.execute("INSERT INTO movement (movement_text) VALUES ('Client retiré : %s')",
-                       (ClientController.get_client(index)["company_name"],))
-        cursor.execute(query, (index,))
+        client = ClientController.get_client(index)
 
-        conn.commit()
+        company_name = client["company_name"] if client else "Inconnu"
+
+        try:
+            query_delete = "DELETE FROM client WHERE id_client = %s"
+            cursor.execute(query_delete, (index,))
+
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            print(f"Erreur lors de la suppression : {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
+    @staticmethod
+    def search_clients_by_name(search_term):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        filter_value = f"{search_term}%"
+
+        query = "SELECT * FROM client WHERE company_name LIKE %s"
+
+        cursor.execute(query, (filter_value,))
+        results = cursor.fetchall()
 
         cursor.close()
         conn.close()
+        return results
 

@@ -18,8 +18,11 @@ class ClientController:
         return ClientModel.get_client_count(condition)
 
     @staticmethod
-    def get_clients():
-        return ClientModel.get_clients()
+    def get_clients(search_term):
+        if not search_term:
+            return ClientModel.get_clients()
+        else:
+            return ClientModel.search_clients_by_name(search_term)
 
     @staticmethod
     def get_client(index):

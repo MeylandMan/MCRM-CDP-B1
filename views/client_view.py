@@ -16,16 +16,18 @@ class ClientView(ctk.CTkFrame):
         super().__init__(root, fg_color="transparent")
         self.root = root
         self.controller = controller
+        self.search_value = None
 
         self.pack(fill="both", expand=True)
 
     def refresh_widgets(self):
         for widget in self.winfo_children():
             widget.destroy()
+        print("search value after : ", self.search_value)
         self.create_widgets()
 
     def create_widgets(self):
-        clients = self.controller.get_clients()
+        clients = self.controller.get_clients(self.search_value)
 
         statut_colors = {
             "actif": ("#dcfce7", "#166534"),
@@ -72,12 +74,17 @@ class ClientView(ctk.CTkFrame):
         search_card = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
         search_card.pack(fill="x", padx=10, pady=10)
 
-        search_entry = ctk.CTkEntry(
+        self.search_entry = ctk.CTkEntry(
             search_card,
             placeholder_text="🔍 Rechercher un client...",
             height=36
         )
-        search_entry.pack(fill="x", padx=15, pady=15)
+        self.search_entry.pack(fill="x", padx=15, pady=15)
+        def search_client():
+            self.search_value = self.search_entry.get()
+            self.refresh_widgets()
+
+        self.search_entry.bind("<Return>", lambda event: search_client())
 
         # ----------------------------
         # Liste clients
