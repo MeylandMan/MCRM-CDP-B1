@@ -18,8 +18,11 @@ class ProjectController:
         return ProjectModel.get_project_count(condition)
 
     @staticmethod
-    def get_projects():
-        return ProjectModel.get_projects()
+    def get_projects(search_term):
+        if not search_term:
+            return ProjectModel.get_projects()
+        else:
+            return ProjectModel.search_projects_by_name(search_term)
 
     @staticmethod
     def get_project(index):
