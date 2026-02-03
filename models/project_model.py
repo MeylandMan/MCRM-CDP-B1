@@ -33,6 +33,20 @@ class ProjectModel:
         return projects
 
     @staticmethod
+    def get_projects_client(index):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM project WHERE id_client = %s", (index,))
+
+        projects = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return projects
+
+    @staticmethod
     def get_project(index):
         conn = get_connection()
         cursor = conn.cursor(pymysql.cursors.DictCursor)

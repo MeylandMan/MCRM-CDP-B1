@@ -191,10 +191,9 @@ class InvoiceView(ctk.CTkFrame):
         from controllers.project_controller import ProjectController
         from controllers.client_controller import ClientController
         clients = ClientController.get_clients(None)
-        projects = ProjectController.get_projects(None)
 
-        if len(clients) == 0 or len(projects) == 0:
-            messagebox.showerror("ERREUR", "Veuillez enregistrer au moins un client et projet.")
+        if len(clients) == 0:
+            messagebox.showerror("ERREUR", "Veuillez enregistrer au moins un client.")
             return
 
         modal = ctk.CTkToplevel(self.root)
@@ -320,12 +319,26 @@ class InvoiceView(ctk.CTkFrame):
             value=client_names[0] if action == "Creer" else invoice_client
         )
 
+        def update_projects(selected_client_name):
+            client_obj = next(c for c in clients if c[1] == selected_client_name)
+            client_id = client_obj[0]
+
+            new_projects = ProjectController.get_projects_client(client_id)
+            new_names = [p[1] for p in new_projects] if new_projects else ["Aucun projet"]
+            project_select.configure(values=new_names)
+
+            project_var.set(new_names[0])
+
+            nonlocal projects
+            projects = new_projects
+
         client_select = ctk.CTkOptionMenu(
             form,
             values=client_names,
             variable=client_var,
             height=36,
-            corner_radius=8
+            corner_radius=8,
+            command=update_projects
         )
         client_select.pack(fill="x")
 
@@ -339,6 +352,11 @@ class InvoiceView(ctk.CTkFrame):
             text_color="#374151"
         ).pack(anchor="w", pady=(10, 2))
 
+
+        selected_client = next(
+            c for c in clients if c[1] == client_var.get()
+        )
+        projects = ProjectController.get_projects_client(selected_client[0])
         project_names = [p[1] for p in projects]
 
         invoice_project = ProjectController.get_project(current_invoice["id_project"])["project_name"] if index != -1 else None
@@ -363,9 +381,7 @@ class InvoiceView(ctk.CTkFrame):
         actions.pack(fill="x", padx=20, pady=20)
 
         def submit():
-            selected_client = next(
-                c for c in clients if c[1] == client_var.get()
-            )
+
             selected_project = next(
                 p for p in projects if p[1] == project_var.get()
             )

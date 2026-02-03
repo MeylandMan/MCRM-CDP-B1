@@ -25,6 +25,10 @@ class ProjectController:
             return ProjectModel.search_projects_by_name(search_term)
 
     @staticmethod
+    def get_projects_client(index):
+        return ProjectModel.get_projects_client(index)
+
+    @staticmethod
     def get_project(index):
         return ProjectModel.get_project(index)
 
