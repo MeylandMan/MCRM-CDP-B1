@@ -177,7 +177,7 @@ class InvoiceView(ctk.CTkFrame):
                     ("👁️", lambda:print("Look invoice")),
                     ("⬇️", lambda:print("Download button")),
                     ("✏️", lambda:view.show_invoice_form("Modifier", index)),
-                    ("🗑️", lambda:print("Delete button"))]:
+                    ("🗑️", lambda:show_delete_project_panel(index, view))]:
                     ctk.CTkButton(
                         actions,
                         text=icon,
