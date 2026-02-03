@@ -1,4 +1,5 @@
 from config import get_connection
+import pymysql
 
 class InvoiceModel:
 
@@ -63,4 +64,84 @@ class InvoiceModel:
         conn.close()
 
         return invoices
+    
+
+    @staticmethod
+    def get_invoice(index):
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        cursor.execute("SELECT * FROM invoice WHERE id_invoice = %s", (index,))
+
+        invoice = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return invoice
+
+    @staticmethod
+    def add_invoice(invoice_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        INSERT INTO invoice (amount, statut, id_client, id_project) VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(
+            query,
+            (
+                invoice_data["amount"],
+                invoice_data["statut"],
+                invoice_data["id_client"],
+                invoice_data["id_project"],
+            )
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+    @staticmethod
+    def modify_invoice(index, invoice_data):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        UPDATE invoice SET amount=%s, statut=%s, id_client=%s, id_project=%s WHERE id_invoice = %s
+        """
+
+        cursor.execute(
+            query,(
+                invoice_data["amount"],
+                invoice_data["statut"],
+                invoice_data["id_client"],
+                invoice_data["id_project"],
+                index,
+            )
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+    @staticmethod
+    def delete_invoice(index):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """DELETE FROM invoice WHERE id_invoice = %s"""
+        cursor.execute(query, (index,))
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+    @staticmethod
+    def search_invoices_by_name(search_term):
+        # TBA
+        pass
 
