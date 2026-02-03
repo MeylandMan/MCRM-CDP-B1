@@ -103,61 +103,65 @@ class InvoiceView(ctk.CTkFrame):
         # -----------------------------
         # Rows
         # -----------------------------
+        class InvoiceCard:
+            def __init__(self, index, invoice_date, amount, invoice_statut, id_client, id_project):
+                row = ctk.CTkFrame(table, fg_color="transparent")
+                row.grid(row=index, column=0, columnspan=7, sticky="ew")
+
+                for i in range(7):
+                    row.grid_columnconfigure(i, weight=1)
+
+                from datetime import datetime
+                try:
+                    date_obj = datetime.strptime(str(invoice_date), "%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    print("ERREUR: la date doit être au format YYYY-MM-DD HH:MM:SS")
+                    return None
+
+                year = date_obj.year
+
+                number = f"DEV-{year}-{str(index).zfill(3)}"
+
+                (ctk.CTkLabel(row, text=number, font=("Arial", 12, "bold"), text_color="#111827")
+                 .grid(row=0, column=0, padx=12, pady=14, sticky="w"))
+
+                from controllers.client_controller import ClientController
+                (ctk.CTkLabel(row, text=ClientController.get_client(id_client)["contact_name"],
+                              font=("Arial", 12, "bold"), text_color="#111827")
+                 .grid(row=0, column=1, padx=12, pady=14, sticky="w"))
+
+                from controllers.project_controller import ProjectController
+                (ctk.CTkLabel(row, text=ProjectController.get_project(id_project)["project_name"],
+                              font=("Arial", 12, "bold"),
+                              text_color="#111827")
+                 .grid(row=0, column=2, padx=12, pady=14, sticky="w"))
+
+                (ctk.CTkLabel(row, text=f"{amount} €".replace(",", " "), font=("Arial", 12, "bold"),
+                              text_color="#111827")
+                 .grid(row=0, column=3, padx=12, pady=14, sticky="w"))
+
+                bg, fg = statut_colors[invoice_statut]
+                (ctk.CTkLabel(row, text=invoice_statut, font=("Arial", 12, "bold"), fg_color=bg, text_color=fg,
+                              corner_radius=20)
+                 .grid(row=0, column=4, padx=12, pady=14, sticky="w"))
+
+                (ctk.CTkLabel(row, text=invoice_date, font=("Arial", 12, "bold"),
+                              text_color="#111827")
+                 .grid(row=0, column=5, padx=12, pady=14, sticky="w"))
+
+                actions = ctk.CTkFrame(row, fg_color="transparent")
+                actions.grid(row=0, column=6, padx=12, pady=14, sticky="w")
+
+                for icon in ["👁️", "⬇️", "✏️", "🗑️"]:
+                    ctk.CTkButton(
+                        actions,
+                        text=icon,
+                        width=32,
+                        height=30,
+                        fg_color="#f3f4f6",
+                        text_color="#374151"
+                    ).pack(side="left", padx=2)
+
+                row.grid_rowconfigure(0, minsize=56)
         for row_index, (index, invoice_date, amount, invoice_statut, id_client, id_project) in enumerate(invoices):
-            row = ctk.CTkFrame(table, fg_color="transparent")
-            row.grid(row=index, column=0, columnspan=7, sticky="ew")
-
-            for i in range(7):
-                row.grid_columnconfigure(i, weight=1)
-
-            from datetime import datetime
-            try:
-                date_obj = datetime.strptime(str(invoice_date), "%Y-%m-%d %H:%M:%S")
-            except ValueError:
-                print("ERREUR: la date doit être au format YYYY-MM-DD HH:MM:SS")
-                return None
-
-            year = date_obj.year
-
-            number = f"DEV-{year}-{str(index).zfill(3)}"
-
-            (ctk.CTkLabel(row, text=number, font=("Arial", 12, "bold"), text_color="#111827")
-             .grid(row=0, column=0, padx=12, pady=14, sticky="w"))
-
-            from controllers.client_controller import ClientController
-            (ctk.CTkLabel(row, text=ClientController.get_client(id_client)["contact_name"], font=("Arial", 12, "bold"), text_color="#111827")
-             .grid(row=0, column=1, padx=12, pady=14, sticky="w"))
-
-            from controllers.project_controller import ProjectController
-            (ctk.CTkLabel(row, text=ProjectController.get_project(id_project)["project_name"],
-                          font=("Arial", 12, "bold"),
-                          text_color="#111827")
-             .grid(row=0, column=2, padx=12, pady=14, sticky="w"))
-
-            (ctk.CTkLabel(row, text=f"{amount} €".replace(",", " "), font=("Arial", 12, "bold"),
-                          text_color="#111827")
-             .grid(row=0, column=3, padx=12, pady=14, sticky="w"))
-
-            bg, fg = statut_colors[invoice_statut]
-            (ctk.CTkLabel(row, text=invoice_statut, font=("Arial", 12, "bold"), fg_color=bg, text_color=fg,
-                          corner_radius=20)
-             .grid(row=0, column=4, padx=12, pady=14, sticky="w"))
-
-            (ctk.CTkLabel(row, text=invoice_date, font=("Arial", 12, "bold"),
-                          text_color="#111827")
-             .grid(row=0, column=5, padx=12, pady=14, sticky="w"))
-
-            actions = ctk.CTkFrame(row, fg_color="transparent")
-            actions.grid(row=0, column=6, padx=12, pady=14, sticky="w")
-
-            for icon in ["👁️", "⬇️", "✏️", "🗑️"]:
-                ctk.CTkButton(
-                    actions,
-                    text=icon,
-                    width=32,
-                    height=30,
-                    fg_color="#f3f4f6",
-                    text_color="#374151"
-                ).pack(side="left", padx=2)
-
-            row.grid_rowconfigure(0, minsize=56)
+            InvoiceCard(index, invoice_date, amount, invoice_statut, id_client, id_project)
