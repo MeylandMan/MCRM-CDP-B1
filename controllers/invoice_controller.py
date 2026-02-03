@@ -24,3 +24,17 @@ class InvoiceController:
     @staticmethod
     def get_invoices():
         return InvoiceModel.get_invoices()
+
+    @staticmethod
+    def get_invoice(index):
+        return InvoiceModel.get_invoice(index)
+
+    def add_invoice(self, invoice_data):
+        InvoiceModel.add_invoice(invoice_data)
+
+    def modify_invoice(self, index, invoice_data):
+        InvoiceModel.modify_invoice(index, invoice_data)
+
+    @staticmethod
+    def delete_invoice(index):
+        InvoiceModel.delete_invoice(index)
