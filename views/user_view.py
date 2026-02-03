@@ -74,6 +74,9 @@ class UserView(ctk.CTkFrame):
             placeholder_text="🔍 Rechercher un utilisateur...",
             height=36
         )
+
+        if self.search_value:
+            self.search_entry.insert(0, self.search_value)
         self.search_entry.pack(fill="x", padx=15, pady=15)
 
         def search_user():

@@ -79,6 +79,9 @@ class ClientView(ctk.CTkFrame):
             placeholder_text="🔍 Rechercher un client...",
             height=36
         )
+        if self.search_value:
+            self.search_entry.insert(0, self.search_value)
+
         self.search_entry.pack(fill="x", padx=15, pady=15)
         def search_client():
             self.search_value = self.search_entry.get()
