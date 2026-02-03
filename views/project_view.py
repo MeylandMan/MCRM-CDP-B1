@@ -1,11 +1,11 @@
 import customtkinter as ctk
 
 from controllers.client_controller import ClientController
-
+from tkinter import messagebox
 
 
 def show_delete_project_panel(index, view):
-    from tkinter import messagebox
+
     response = messagebox.askquestion("Delete confirmation", "Voulez vous VRAIMENT supprimer ce projet ?")
 
     if response == "yes":
@@ -205,6 +205,11 @@ class ProjectView(ctk.CTkFrame):
 
     def show_project_form(self, action: str, index=None):
 
+        clients = ClientController.get_clients(None)
+        if len(clients) == 0:
+            messagebox.showerror("ERREUR", "Veuillez enregistrer au moins un client.")
+            return
+
         modal = ctk.CTkToplevel(self.root)
         modal.title("Nouveau projet" if action == "Creer" else "Modifier projet")
         modal.geometry("460x760")
@@ -323,7 +328,7 @@ class ProjectView(ctk.CTkFrame):
             text_color="#374151"
         ).pack(anchor="w", pady=(10, 2))
 
-        clients = ClientController.get_clients()
+
         client_names = [c[1] for c in clients]
 
         from controllers.project_controller import ProjectController
