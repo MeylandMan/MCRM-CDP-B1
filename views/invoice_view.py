@@ -125,7 +125,7 @@ class InvoiceView(ctk.CTkFrame):
         # Rows
         # -----------------------------
         class InvoiceCard:
-            def __init__(self, index, invoice_date, amount, invoice_statut, id_client, id_project):
+            def __init__(self, view, index, invoice_date, amount, invoice_statut, id_client, id_project):
                 row = ctk.CTkFrame(table, fg_color="transparent")
                 row.grid(row=index, column=0, columnspan=7, sticky="ew")
 
@@ -173,19 +173,24 @@ class InvoiceView(ctk.CTkFrame):
                 actions = ctk.CTkFrame(row, fg_color="transparent")
                 actions.grid(row=0, column=6, padx=12, pady=14, sticky="w")
 
-                for icon in ["👁️", "⬇️", "✏️", "🗑️"]:
+                for icon, func in [
+                    ("👁️", lambda:print("Look invoice")),
+                    ("⬇️", lambda:print("Download button")),
+                    ("✏️", lambda:view.show_invoice_form("Modifier", index)),
+                    ("🗑️", lambda:print("Delete button"))]:
                     ctk.CTkButton(
                         actions,
                         text=icon,
                         width=32,
                         height=30,
                         fg_color="#f3f4f6",
-                        text_color="#374151"
+                        text_color="#374151",
+                        command=func
                     ).pack(side="left", padx=2)
 
                 row.grid_rowconfigure(0, minsize=56)
         for row_index, (index, invoice_date, amount, invoice_statut, id_client, id_project) in enumerate(invoices):
-            InvoiceCard(index, invoice_date, amount, invoice_statut, id_client, id_project)
+            InvoiceCard(self, index, invoice_date, amount, invoice_statut, id_client, id_project)
 
     def show_invoice_form(self, action: str, index=None):
         from controllers.project_controller import ProjectController
@@ -396,8 +401,13 @@ class InvoiceView(ctk.CTkFrame):
             if invoice_data["amount"] == "":
                 messagebox.showerror("Erreur", "Le montant est obligatoire")
                 return
-            if not invoice_data["amount"].is_digit():
-                messagebox.showerror("Erreur", "Entrez un montant correct")
+
+            try:
+                amount_value = float(invoice_data["amount"])
+                if amount_value < 0:
+                    raise ValueError
+            except ValueError:
+                messagebox.showerror("Erreur", "Veuillez entrer un montant numérique valide (ex: 125.20)")
                 return
 
             if action == "Creer":
